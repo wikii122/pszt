@@ -11,6 +11,14 @@ DESCRIPTION = "Program finding function minimum using evolutionary algorith"
 FUNCTION = lambda x1, x2: (1./3.) * x1**6 - 2.1 * x1**4 + 4 * x1**2 \
                         + 4 * x2**4 - 4 * x2**2 + x1 * x2
 
+
+def run(mu, lambde):
+    print(mu, lambde)
+
+
 if __name__ == "__main__":
     parser = ArgumentParser(description=DESCRIPTION)
+    parser.add_argument("lambda", help="Number of children each parent spawns")
+    parser.add_argument("mu", help="Number of parents taken into consideration when creating children")
     args = parser.parse_args()
+
