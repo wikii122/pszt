@@ -8,6 +8,5 @@ class Simulation:
         self.mu = mu
         self.lamb = lamb
         
-
-
-        
+    def run(self):
+        pass # TODO
