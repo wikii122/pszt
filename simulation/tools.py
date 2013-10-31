@@ -16,9 +16,3 @@ def point_generator(min_x, delta_x, min_y, delta_y, seed=None):
         y = random.random() * delta_y
         yield (min_x + x, min_y + y)
 
-def log(fun):
-    def log_wrapper(*args, **kw):
-        print(args)
-        ret = fun(*args, **kw)
-        print(ret)
-    return log_wrapper
