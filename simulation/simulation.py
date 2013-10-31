@@ -7,6 +7,7 @@ class Simulation:
         self.func = func
         self.mu = mu
         self.lamb = lamb
+        
 
 
         
