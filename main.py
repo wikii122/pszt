@@ -31,5 +31,5 @@ if __name__ == "__main__":
                          creating children")
     args = parser.parse_args()
 
-    run(args.mu, args.lambd)
+    run(args.mu, getattr(args, "lambda"))  # Getting attribute manually due to name clash
 
