@@ -1,13 +1,14 @@
 """
-Top level representation of simulation
+Top level representation of simulation.
 """
+#TODO: remove relative imports
 from . import tools
 from .sprite import Sprite
 
 
 class Simulation:
     """
-    Instance of this class represents siulated world
+    Instance of this class represents simulated world
     """
     def __init__(self, func, mi=100, lamb=10):
         self.func = func
