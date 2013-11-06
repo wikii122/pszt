@@ -25,6 +25,6 @@ class Simulation:
         coord = tools.point_generator(seed=1, min_x=-3, min_y=-3, delta_x=6, delta_y=6)
         while mi:
             mi -= 1
-            sprite = Sprite(*next(coord))
+            sprite = Sprite(*next(coord), fun=self.func)
             self.sprites.append(sprite)
 
