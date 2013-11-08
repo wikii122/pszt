@@ -18,13 +18,23 @@ class Simulation:
         self.initial_spawn()
 
     def run(self):
-        pass # TODO
+        while self:
+            self.step()
+        # TODO: Print results.
 
     def initial_spawn(self):
         mi = self.mi
-        coord = tools.point_generator(seed=1, min_x=-3, min_y=-3, delta_x=6, delta_y=6)
+        coord = tools.point_generator(seed=1,
+                                      min_x=-3, delta_x=6,
+                                      min_y=-3, delta_y=6)
         while mi:
             mi -= 1
             sprite = Sprite(*next(coord), fun=self.func)
             self.sprites.append(sprite)
 
+    def step(self):
+        pass  # TODO
+
+    def __bool__(self):
+        # TODO here should be finish condition.
+        return True
