@@ -14,8 +14,9 @@ class Simulation:
         self.func = func
         self.mi = mi
         self.lamb = lamb
-        self.sprites = list()
+        self.population = list()
         self.initial_spawn()
+        self.steps = 0
 
     def run(self):
         while self:
@@ -30,10 +31,21 @@ class Simulation:
         while mi:
             mi -= 1
             sprite = Sprite(*next(coord), fun=self.func)
-            self.sprites.append(sprite)
+            self.population.append(sprite)
 
     def step(self):
-        pass  # TODO
+        self.steps += 1
+        sprites = list()
+
+        for sprite in self.population:
+            sprites += sprite.spawn(self.lamb)
+
+        sprites = sorted(sprites)
+        self.population = sprites[:self.mi]
+
+        print("Step {step}:".format(step=self.steps))
+        for sprite in self.population:
+            print(str(sprite))
 
     def __bool__(self):
         # TODO here should be finish condition.
