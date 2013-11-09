@@ -32,14 +32,20 @@ def run(mi, lambda_, prints=True):
 
 def test(mi, lambda_):
     bad = []
+    trp = fap = 0.0
     for x in range(2, args.mi):
         for y in range(2, getattr(args, "lambda")):
             res = run(x, y, False)
             if res.value > -1.03:
+                fap += 1
+
                 print("Mi: {mi:<3}, lambda: {lambda_:<3} => {val}"
                      .format(mi=x, lambda_=y, val=res.value))
                 bad.append((x, y))
+            else:
+                trp += 1
     print(bad)
+    print("Precision: {prec}".format(prec=trp/(trp+fap)))
 
 if __name__ == "__main__":
     parser = ArgumentParser(description=DESCRIPTION)
