@@ -3,13 +3,14 @@
 """
 Program finding function minimum using evolutionary algorithm.
 
-By Andrzej Krzynówek, Wiktor Ślęczka & Radosław Więch
+By Andrzej KrzynĂłwek, Wiktor ĹšlÄ™czka & RadosĹ‚aw WiÄ™ch
 """
 from argparse import ArgumentParser
 from simulation import Simulation
 
 DESCRIPTION = "Program finding function minimum using evolutionary algorith"
-FUNCTION = lambda x1, x2: (1./3.) * x1**6 - 2.1 * x1**4 + 4 * x1**2
+FUNCTION = lambda x1, x2: (4. * x1**2 - 2.1 * x1**4 + (1./3.) * x1**6 + \
+                           x1 * x2 - 4 * x2**2 + 4 * x2**4 )
 
 
 def run(valmi, lambde):
