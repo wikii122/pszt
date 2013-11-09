@@ -21,8 +21,9 @@ class Simulation:
     def run(self):
         while self:
             self.step()
-        
-        print("Solution {solution}".format(solution=self.population[0]))
+
+        print("Simulation finished after {step} generations\n"
+              "Solution {solution}".format(solution=self.population[0], step=self.steps))
 
     def initial_spawn(self):
         mi = self.mi
@@ -44,16 +45,17 @@ class Simulation:
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
 
-        print("Step {step}:".format(step=self.steps))
-        for sprite in self.population:
-            print(str(sprite))
+        if not self.steps % 10:
+            print("Step {step}:".format(step=self.steps))
+            for sprite in self.population:
+                print(str(sprite))
 
     def __bool__(self):
         # TODO here should be finish condition.
-         
-        epsilon = 0.0001
+
+        epsilon = 0.000001
         delta = abs(self.population[0] - self.population[-1])
         if delta < epsilon:
             return False
-        
+
         return True
