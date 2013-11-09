@@ -21,7 +21,8 @@ class Simulation:
     def run(self):
         while self:
             self.step()
-        # TODO: Print results.
+        
+        print("Solution {solution}".format(solution=self.population[0]))
 
     def initial_spawn(self):
         mi = self.mi
@@ -38,7 +39,7 @@ class Simulation:
         sprites = list()
 
         for sprite in self.population:
-            sprites += sprite.spawn(self.lamb)
+            sprites += sprite.spawn(self.lamb, self.steps)
 
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
@@ -49,4 +50,10 @@ class Simulation:
 
     def __bool__(self):
         # TODO here should be finish condition.
+         
+        epsilon = 0.0001
+        delta = abs(self.population[0] - self.population[-1])
+        if delta < epsilon:
+            return False
+        
         return True

@@ -16,10 +16,11 @@ class Sprite:
         self.value = fun(x, y)
         self.generation = generation
 
-    def spawn(self, lambda_):
+    def spawn(self, lambda_, n):
         sprites = list()
-        coord = tools.point_generator(min_x=-3, delta_x=6,
-                                      min_y=-3, delta_y=6)
+        delta = self.x/n
+        coord = tools.point_generator(min_x=self.x-delta, delta_x=2*delta,
+                                      min_y=self.y-delta, delta_y=2*delta)
         while lambda_:
             lambda_ -= 1
             sprites.append(Sprite(*next(coord),
@@ -45,3 +46,6 @@ class Sprite:
 
     def __str__(self):
         return "({x}, {y}) => {val}".format(x=self.x, y=self.y, val=self.value)
+    
+    def __sub__(self, other):
+        return self.value - other.value
