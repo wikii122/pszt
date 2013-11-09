@@ -21,13 +21,14 @@ class Simulation:
         self.initial_spawn()
         self.steps = 0
 
-    def run(self):
+    def run(self, prints=True):
         while self:
-            self.step()
+            self.step(prints)
 
-        print("Simulation finished after {step} generations\n"
-              "Solution {solution}".format(solution=self.population[0],
-                                           step=self.steps))
+        if prints:
+            print("Simulation finished after {step} generations\n"
+                  "Solution {solution}".format(solution=self.population[0],
+                                               step=self.steps))
         return self.population[0]
 
     def initial_spawn(self):
@@ -40,7 +41,7 @@ class Simulation:
             sprite = Sprite(*next(coord), fun=self.func)
             self.population.append(sprite)
 
-    def step(self):
+    def step(self, prints=True):
         self.steps += 1
         sprites = list()
 
@@ -50,7 +51,7 @@ class Simulation:
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
 
-        if not self.steps % 10:
+        if not self.steps % 10 and prints:
             print("Step {step}:".format(step=self.steps))
             for sprite in self.population:
                 print(str(sprite))
