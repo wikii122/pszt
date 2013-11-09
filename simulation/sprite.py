@@ -28,7 +28,6 @@ class Sprite:
                                    generation=self.generation+1))
         return sprites
 
-    # TODO: check comparisons
     def __gt__(self, other):
         return self.value > other.value
 
@@ -45,7 +44,7 @@ class Sprite:
         return self.value <= other.value
 
     def __str__(self):
-        return "({x}, {y}) => {val}".format(x=self.x, y=self.y, val=self.value)
-    
+        return "({x:<19}, {y:<19}) => {val:<19}".format(x=self.x, y=self.y,
+                                                    val=self.value)
     def __sub__(self, other):
         return self.value - other.value
