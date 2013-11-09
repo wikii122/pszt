@@ -3,12 +3,12 @@
 """
 Program finding function minimum using evolutionary algorithm.
 
-By Andrzej KrzynĂłwek, Wiktor ĹšlÄ™czka & RadosĹ‚aw WiÄ™ch
+By Andrzej Krzynówek, Wiktor Ślęczka & Radosław Więch
 """
 from argparse import ArgumentParser
 from simulation import Simulation
 
-DESCRIPTION = "Program finding function minimum using evolutionary algorith"
+DESCRIPTION = "Program finding function minimum using evolutionary algorithm"
 FUNCTION = lambda x1, x2: (4. * x1**2 - 2.1 * x1**4 + (1./3.) * x1**6 + \
                            x1 * x2 - 4 * x2**2 + 4 * x2**4 )
 
