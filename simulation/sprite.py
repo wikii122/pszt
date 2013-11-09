@@ -46,5 +46,8 @@ class Sprite:
     def __str__(self):
         return "({x:<19}, {y:<19}) => {val:<19}".format(x=self.x, y=self.y,
                                                     val=self.value)
+    def __add__(self, other):
+        return self.value + other.value
+
     def __sub__(self, other):
         return self.value - other.value

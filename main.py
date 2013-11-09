@@ -39,7 +39,7 @@ def test(mi, lambda_):
             if res.value > -1.03:
                 fap += 1
 
-                print("Mi: {mi:<3}, lambda: {lambda_:<3} => {val}"
+                print("Mi: {mi:>3}, lambda: {lambda_:>3} => {val}"
                      .format(mi=x, lambda_=y, val=res.value))
                 bad.append((x, y))
             else:
