@@ -5,6 +5,8 @@ Program finding function minimum using evolutionary algorithm.
 
 By Andrzej Krzynówek, Wiktor Ślęczka & Radosław Więch
 """
+import sys
+
 from argparse import ArgumentParser
 from simulation import Simulation
 
@@ -13,13 +15,16 @@ FUNCTION = lambda x1, x2: (4. * x1**2 - 2.1 * x1**4 + (1./3.) * x1**6 + \
                            x1 * x2 - 4 * x2**2 + 4 * x2**4 )
 
 
-def run(valmi, lambde):
+def run(mi, lambda_):
     """
     Main function of program, it's used to create and start the simulation
     """
+    if mi <= 1 or lambda_ <= 1:
+        print("Parameters must be greater than 1")
+        sys.exit(1)
     print("Starting simulation with parameters \
-          mu: {0} and lambda: {1}".format(valmi, lambde))
-    sim = Simulation(FUNCTION, valmi, lambde)
+          mu: {0} and lambda: {1}".format(mi, lambda_))
+    sim = Simulation(FUNCTION, mi, lambda_)
     sim.run()
 
 

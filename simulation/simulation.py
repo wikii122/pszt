@@ -10,10 +10,13 @@ class Simulation:
     """
     Instance of this class represents simulated world
     """
-    def __init__(self, func, mi=100, lamb=10):
+    def __init__(self, func, mi=100, lambda_=10):
+        if mi <= 1 or lambda_ <= 1:
+            raise ValueError("Unsupported parameters")
+
         self.func = func
         self.mi = mi
-        self.lamb = lamb
+        self.lambda_ = lambda_
         self.population = list()
         self.initial_spawn()
         self.steps = 0
@@ -23,7 +26,9 @@ class Simulation:
             self.step()
 
         print("Simulation finished after {step} generations\n"
-              "Solution {solution}".format(solution=self.population[0], step=self.steps))
+              "Solution {solution}".format(solution=self.population[0],
+                                           step=self.steps))
+        return self.population[0]
 
     def initial_spawn(self):
         mi = self.mi
@@ -40,7 +45,7 @@ class Simulation:
         sprites = list()
 
         for sprite in self.population:
-            sprites += sprite.spawn(self.lamb, self.steps)
+            sprites += sprite.spawn(self.lambda_, self.steps)
 
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
