@@ -12,7 +12,7 @@ def point_generator(min_x, delta_x, min_y, delta_y, seed=None):
         random.seed(seed)
 
     while True:
-        x = random.random() * delta_x
-        y = random.random() * delta_y
+        x = random.random() * delta_x - delta_x/2
+        y = random.random() * delta_y - delta_y/2
         yield (min_x + x, min_y + y)
 
