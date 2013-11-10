@@ -22,7 +22,7 @@ class Simulation:
         self.steps = 0
 
     def run(self, prints=True):
-        while self:
+        while self.condition():
             self.step(prints)
 
         if prints:
@@ -56,7 +56,7 @@ class Simulation:
             for sprite in self.population:
                 print(str(sprite))
 
-    def __bool__(self):
+    def condition(self):
         # TODO here should be finish condition.
 
         epsilon = 0.000001
