@@ -35,8 +35,8 @@ class Simulation:
     def initial_spawn(self):
         mi = self.mi
         coord = tools.point_generator(seed=1,
-                                      min_x=-3, delta_x=6,
-                                      min_y=-3, delta_y=6)
+                                      min_x=-3, delta_x=3,
+                                      min_y=-3, delta_y=3)
         while mi:
             mi -= 1
             sprite = Sprite(*next(coord), fun=self.func)

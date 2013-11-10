@@ -19,8 +19,8 @@ class Sprite:
     def spawn(self, lambda_):
         sprites = list()
         delta = self.x/self.generation
-        coord = tools.point_generator(min_x=self.x-delta, delta_x=2*delta,
-                                      min_y=self.y-delta, delta_y=2*delta)
+        coord = tools.point_generator(min_x=self.x-delta, delta_x=delta,
+                                      min_y=self.y-delta, delta_y=delta)
         while lambda_:
             lambda_ -= 1
             sprites.append(Sprite(*next(coord),
