@@ -9,16 +9,16 @@ class Sprite:
     """
     Represents the population member during simulation.
     """
-    def __init__(self, x, y, fun, generation=0):
+    def __init__(self, x, y, fun, generation=1):
         self.x = x
         self.y = y
         self.fun = fun
         self.value = fun(x, y)
         self.generation = generation
 
-    def spawn(self, lambda_, n):
+    def spawn(self, lambda_):
         sprites = list()
-        delta = self.x/n
+        delta = self.x/self.generation
         coord = tools.point_generator(min_x=self.x-delta, delta_x=2*delta,
                                       min_y=self.y-delta, delta_y=2*delta)
         while lambda_:

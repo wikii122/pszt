@@ -46,7 +46,7 @@ class Simulation:
         sprites = list()
 
         for sprite in self.population:
-            sprites += sprite.spawn(self.lambda_, self.steps)
+            sprites += sprite.spawn(self.lambda_)
 
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
