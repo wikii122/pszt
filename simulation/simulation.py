@@ -20,6 +20,7 @@ class Simulation:
         self.population = list()
         self.initial_spawn()
         self.steps = 0
+        self.epsilon = 0.000001
 
     def run(self, prints=True):
         while self.condition():
@@ -57,11 +58,8 @@ class Simulation:
                 print(str(sprite))
 
     def condition(self):
-        # TODO here should be finish condition.
-
-        epsilon = 0.000001
         delta = abs(self.population[0] - self.population[-1])
-        if delta < epsilon:
+        if delta < self.epsilon:
             return False
 
         return True
