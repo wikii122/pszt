@@ -35,8 +35,8 @@ class Simulation:
     def initial_spawn(self):
         mi = self.mi
         coord = tools.point_generator(seed=1,
-                                      x=0, delta_x=3,
-                                      y=0, delta_y=3)
+                                      x=0, delta_x=30,
+                                      y=0, delta_y=30)
         while mi:
             mi -= 1
             sprite = Sprite(*next(coord), fun=self.func, range_=6)
@@ -58,5 +58,4 @@ class Simulation:
                 print(str(sprite))
 
     def condition(self):
-        # Disabled for testing
-        return False # abs(self.population[0] - self.population[-1]) < self.epsilon
+        return abs(self.population[0] - self.population[-1]) < self.epsilon

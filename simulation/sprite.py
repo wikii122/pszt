@@ -55,9 +55,8 @@ class Sprite:
         return self.value <= other.value
 
     def __str__(self):
-        return "({x:<25}, {y:<25}) {gen:<10} => {val:<19}".format(x=self.x, y=self.y,
-                                                                  val=self.value,
-                                                                  gen=self.generation)
+        return "({x:<20}, {y:<20}) => {val:<19}".format(x=self.x, y=self.y,
+                                                        val=self.value)
     def __add__(self, other):
         return self.value + other.value
 
