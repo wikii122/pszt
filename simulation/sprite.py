@@ -21,13 +21,15 @@ class Sprite:
     def spawn(self, lambda_):
         sprites = list()
         delta = self.range / self.generation * _factor
-        coord = tools.point_generator(x=self.x, delta_x=delta,
-                                      y=self.y, delta_y=delta)
         lambda_ -= 1
+        coord = tools.point_generator(x=self.x, delta_x=self.range,
+                                      y=self.y, delta_y=self.range)
         sprites.append(Sprite(*next(coord),
                                fun=self.fun,
                                range_=self.range)
                       )
+        coord = tools.point_generator(x=self.x, delta_x=delta,
+                                      y=self.y, delta_y=delta)
         while lambda_:
             lambda_ -= 1
             sprites.append(Sprite(*next(coord),
@@ -53,8 +55,9 @@ class Sprite:
         return self.value <= other.value
 
     def __str__(self):
-        return "({x:<25}, {y:<25}) => {val:<19}".format(x=self.x, y=self.y,
-                                                    val=self.value)
+        return "({x:<25}, {y:<25}) {gen:<10} => {val:<19}".format(x=self.x, y=self.y,
+                                                                  val=self.value,
+                                                                  gen=self.generation)
     def __add__(self, other):
         return self.value + other.value
 
