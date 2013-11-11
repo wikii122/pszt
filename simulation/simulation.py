@@ -58,4 +58,5 @@ class Simulation:
                 print(str(sprite))
 
     def condition(self):
-        return abs(self.population[0] - self.population[-1]) < self.epsilon
+        # Disabled for testing
+        return False # abs(self.population[0] - self.population[-1]) < self.epsilon
