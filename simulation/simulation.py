@@ -34,12 +34,11 @@ class Simulation:
 
     def initial_spawn(self):
         mi = self.mi
-        coord = tools.point_generator(seed=1,
-                                      x=0, delta_x=30,
-                                      y=0, delta_y=30)
         while mi:
+            coord = tools.point_generator(x=0, delta_x=3,
+                                          y=0, delta_y=3)
             mi -= 1
-            sprite = Sprite(*next(coord), fun=self.func, range_=6)
+            sprite = Sprite(*coord, fun=self.func, range_=6)
             self.population.append(sprite)
 
     def step(self, prints=True):

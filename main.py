@@ -6,6 +6,7 @@ Program finding function minimum using evolutionary algorithm.
 By Andrzej Krzynówek, Wiktor Ślęczka & Radosław Więch
 """
 import sys
+import random
 
 from argparse import ArgumentParser
 from simulation import Simulation
@@ -35,5 +36,6 @@ if __name__ == "__main__":
                         "Number of parents taken into consideration when \
                          creating children")
     args = parser.parse_args()
+    random.seed(1)
     # Getting attribute manually due to name clash.
     run(args.mi, getattr(args, "lambda"))
