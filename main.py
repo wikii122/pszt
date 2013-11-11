@@ -35,7 +35,11 @@ if __name__ == "__main__":
     parser.add_argument("mi", type=int, help=\
                         "Number of parents taken into consideration when \
                          creating children")
+    parser.add_argument("--debug", action="store_true", help=\
+                        "Use fixed seed for random generator")
+
     args = parser.parse_args()
-    random.seed(1)
+    if args.debug:
+        random.seed(1)
     # Getting attribute manually due to name clash.
     run(args.mi, getattr(args, "lambda"))
