@@ -4,12 +4,13 @@ Contains Sprite class definition.
 # TODO remove relative import
 from . import tools
 
+_factor = 100
 
 class Sprite:
     """
     Represents the population member during simulation.
     """
-    def __init__(self, x, y, fun, generation=1):
+    def __init__(self, x, y, fun, generation=_factor):
         self.x = x
         self.y = y
         self.fun = fun
@@ -18,7 +19,7 @@ class Sprite:
 
     def spawn(self, lambda_):
         sprites = list()
-        delta = self.x/self.generation
+        delta = self.x / self.generation * _factor
         coord = tools.point_generator(x=self.x, delta_x=delta,
                                       y=self.y, delta_y=delta)
         while lambda_:
