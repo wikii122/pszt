@@ -4,7 +4,7 @@ Contains Sprite class definition.
 # TODO remove relative import
 from . import tools
 
-_factor = 10
+_factor = 5
 
 class Sprite:
     """
