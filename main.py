@@ -30,11 +30,11 @@ def run(mi, lambda_):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description=DESCRIPTION)
-    parser.add_argument("lambda", type=int, help=\
-                        "Number of children each parent spawns")
     parser.add_argument("mi", type=int, help=\
                         "Number of parents taken into consideration when \
                          creating children")
+    parser.add_argument("lambda", type=int, help=\
+                        "Number of children each parent spawns")
     parser.add_argument("--debug", action="store_true", help=\
                         "Use fixed seed for random generator")
 
