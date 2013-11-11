@@ -39,7 +39,7 @@ class Simulation:
                                       y=0, delta_y=3)
         while mi:
             mi -= 1
-            sprite = Sprite(*next(coord), fun=self.func)
+            sprite = Sprite(*next(coord), fun=self.func, range_=6)
             self.population.append(sprite)
 
     def step(self, prints=True):
