@@ -54,8 +54,7 @@ class Simulation:
 
         if not self.steps % 10 and prints:
             print("Step {step}:".format(step=self.steps))
-            for sprite in self.population:
-                print(str(sprite))
+            print(str(self.population[0]))
 
     def condition(self):
         return abs(self.population[0] - self.population[-1]) < self.epsilon
