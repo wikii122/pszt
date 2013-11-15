@@ -1,3 +1,2 @@
-from . import simulation
-
+from simulation import simulation
 Simulation = simulation.Simulation

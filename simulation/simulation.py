@@ -1,9 +1,8 @@
 """
 Top level representation of simulation.
 """
-#TODO: remove relative imports
-from . import tools
-from .sprite import Sprite
+from simulation import tools
+from simulation.sprite import Sprite
 
 
 class Simulation:

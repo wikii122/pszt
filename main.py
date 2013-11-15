@@ -5,10 +5,15 @@ Program finding function minimum using evolutionary algorithm.
 
 By Andrzej Krzynówek, Wiktor Ślęczka & Radosław Więch
 """
+import os
 import sys
 import random
 
 from argparse import ArgumentParser
+
+path = os.path.dirname(sys.argv[0])
+path = os.path.abspath(path)
+sys.path.append(path)
 from simulation import Simulation
 
 DESCRIPTION = "Program finding function minimum using evolutionary algorithm"

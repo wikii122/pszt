@@ -1,8 +1,7 @@
 """
 Contains Sprite class definition.
 """
-# TODO remove relative import
-from . import tools
+from simulation import tools
 
 
 class Sprite:
