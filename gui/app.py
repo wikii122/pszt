@@ -14,6 +14,12 @@ class Application(QtGui.QApplication):
 
         self.frame = Window()
 
+    def run(self):
+        """
+        Starts the QT mainloop for application.
+        """
+        return self.exec_()
+
 class Window(QtGui.QMainWindow):
     """
     Main window frame.
