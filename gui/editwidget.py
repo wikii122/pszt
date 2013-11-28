@@ -10,14 +10,15 @@ class EditWidget(QtGui.QWidget):
     """
     def __init__(self, *args, **kwarg):
         super(EditWidget, self).__init__(*args, **kwarg)
-
-        self.layout = QtGui.QFormLayout()
+        self.main_layout = QtGui.QVBoxLayout()
         self.edits = list()
+        self.button = QtGui.QPushButton("Run!")
 
     def set_labels(self, labels):
         """
         Set label names in widget.
         """
+        self.layout = QtGui.QFormLayout()
         for label in labels:
             edit = QtGui.QLineEdit()
             self.layout.addRow(QtGui.QLabel(label), edit)
@@ -27,5 +28,7 @@ class EditWidget(QtGui.QWidget):
         """
         Finalize layout and call QWidget.show() method.
         """
-        self.setLayout(self.layout)
+        self.main_layout.addLayout(self.layout)
+        self.main_layout.addWidget(self.button)
+        self.setLayout(self.main_layout)
         super(EditWidget, self).show()
