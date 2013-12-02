@@ -3,6 +3,8 @@ Window widget.
 """
 from PySide import QtGui
 from gui.editwidget import EditWidget
+from gui.graphwidget import GraphWidget
+
 
 class Window(QtGui.QMainWindow):
     """
@@ -15,10 +17,17 @@ class Window(QtGui.QMainWindow):
 
         edits = EditWidget()
         edits.set_labels(self.labels)
+        edits.setMaximumWidth(100)
         edits.show()
+
+        graph = GraphWidget()
+        graph.setMaximumWidth(500)
+        graph.setMinimumWidth(500)
+        graph.show()
 
         layout = QtGui.QHBoxLayout()
         layout.addWidget(edits)
+        layout.addWidget(graph)
 
         widget = QtGui.QWidget()
         widget.setLayout(layout)
