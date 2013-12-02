@@ -1,7 +1,7 @@
 """
 Window widget.
 """
-from PySide import QtGui
+from PySide import QtGui, QtCore
 from gui.editwidget import EditWidget
 from gui.graphwidget import GraphWidget
 
@@ -12,6 +12,7 @@ class Window(QtGui.QMainWindow):
     """
 
     labels = ['mi', 'lambda']
+    size = (600, 350)
     def __init__(self, *args, **kwarg):
         super(Window, self).__init__(*args, **kwarg)
 
@@ -33,10 +34,12 @@ class Window(QtGui.QMainWindow):
         widget.setLayout(layout)
         widget.show()
 
-        self.setGeometry(100, 100, 600, 350)
+        self.setGeometry(100, 100, *self.size)
         self.setCentralWidget(widget)
         self.setWindowTitle("E'voile")
         self.statusBar().showMessage('Ready')
 
-
-
+    def show(self):
+        super(Window, self).show()
+        size = QtCore.QSize(*self.size)
+        self.setFixedSize(size)
