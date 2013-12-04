@@ -20,4 +20,4 @@ class Application(QtGui.QApplication):
         """
         Starts the QT mainloop for application.
         """
-        return self.exec_()
+        sys.exit(self.exec_())
