@@ -18,12 +18,12 @@ class Window(QtGui.QMainWindow):
 
         edits = EditWidget()
         edits.set_labels(self.labels)
-        edits.setMaximumWidth(100)
+        edits.setMaximumWidth(150)
         edits.show()
 
         graph = GraphWidget()
-        graph.setMaximumWidth(500)
-        graph.setMinimumWidth(500)
+        graph.setMaximumWidth(450)
+        graph.setMinimumWidth(450)
         graph.show()
 
         layout = QtGui.QHBoxLayout()
