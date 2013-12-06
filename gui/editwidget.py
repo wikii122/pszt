@@ -32,8 +32,12 @@ class EditWidget(QtGui.QWidget):
             self.edits.append(edit)
 
     def change(self, _):
-        """Setter for change parameters indicator"""
+        """
+        Invoked when parameters are changed.
+        """
         self.changed = True
+        if not self.run:
+            self.button.setText("&Run!")
 
     def show(self):
         """
@@ -53,11 +57,6 @@ class EditWidget(QtGui.QWidget):
 
         edits = map(lambda x: x.text(), self.edits)
         values = {x:y for x, y in zip(self.labels, edits)}
-        # TODO make this more subtle.
-        for x in values:
-            if not values[x]:
-                QtGui.QMessageBox.question(self, 'Message', "Empty field!")
-                return
         if self.run and self.changed:
             # Run parameters changed, prepare to run with changed
             # parameters.
@@ -72,6 +71,11 @@ class EditWidget(QtGui.QWidget):
             # TODO send correct signal to simulation
         else:
             # Start running with current parameters
+            for x in values:
+                if not values[x]:
+                    # TODO make this more subtle.
+                    QtGui.QMessageBox.question(self, 'Message', "Empty field!")
+                    return
             self.run = True
             self.changed = False
             self.button.setText("&Stop!")
