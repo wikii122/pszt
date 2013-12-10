@@ -2,15 +2,13 @@
 Wrapper for simulation class.
 """
 
-from PySide.QtCore import QObject
 from simulation.simulation import Simulation
 
-class SimulationWrapper(QObject):
+class SimulationWrapper:
     """
     Control interface for simulation and separate thread used for running it.
     """
     def __init__(self):
-        super(SimulationWrapper, self).__init__()
         self.simulation = None
 
     def start(self):
