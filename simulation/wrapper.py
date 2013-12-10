@@ -2,14 +2,17 @@
 Wrapper for simulation class.
 """
 
+from PySide.QtCore import QThread
 from simulation.simulation import Simulation
 
-class SimulationWrapper:
+class SimulationWrapper(QThread):
     """
     Control interface for simulation and separate thread used for running it.
     """
-    def __init__(self):
+    def __init__(self, parent=None):
+        super(SimulationWrapper, self).__init__(parent)
         self.simulation = None
+        self.exiting = False
 
     def start(self):
         """
@@ -29,5 +32,8 @@ class SimulationWrapper:
         """
         pass
 
-    def _thread_run(self):
-        pass
+    def run(self):
+        if not self.simulation:
+            raise ValueError("Simulation not initialised")
+        while not self.exiting:
+            self.simulation.step()
