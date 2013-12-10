@@ -12,7 +12,7 @@ class SimulationWrapper(QThread):
     def __init__(self, parent=None):
         super(SimulationWrapper, self).__init__(parent)
         self.simulation = None
-        self.exiting = False
+        self.running = False
 
     def start(self):
         """
@@ -24,16 +24,17 @@ class SimulationWrapper(QThread):
         """
         Function used to handle the signal of stopping the simulation.
         """
-        pass
+        self.running = True
 
     def continue_(self):
         """
         Function used to handle the signal of continuation of the simulation.
         """
-        pass
+        self.running = False
+        self.start()
 
     def run(self):
         if not self.simulation:
             raise ValueError("Simulation not initialised")
-        while not self.exiting:
+        while not self.running:
             self.simulation.step()
