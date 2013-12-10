@@ -3,6 +3,7 @@ Top level representation of simulation.
 """
 from simulation import tools
 from simulation.sprite import Sprite
+import random
 
 
 class Simulation:
@@ -37,15 +38,13 @@ class Simulation:
             coord = tools.point_generator(x=0, delta_x=3,
                                           y=0, delta_y=3)
             mi -= 1
-            sprite = Sprite(*coord, fun=self.func, range_=6)
+            sprite = Sprite(*coord, fun=self.func, deviationX=10, deviationY=10)
             self.population.append(sprite)
 
     def step(self, prints=True):
         self.steps += 1
-        sprites = list()
-
-        for sprite in self.population:
-            sprites += sprite.spawn(self.lambda_)
+        
+        sprites = self.crossover()
 
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
@@ -56,3 +55,31 @@ class Simulation:
 
     def condition(self):
         return abs(self.population[0] - self.population[-1]) < self.epsilon
+        
+    def crossover(self):
+        sprites = list()
+        i = self.lambda_
+        
+        while i > 0:
+            j = random.randint(0, len(self.population)-1)
+            #tymczasowe rozwiazanie generacji k, powinno byc j != k
+            k = random.randint(0, len(self.population)-1)
+            a = random.random()
+            x = tools.interpolate(a, self.population[j].x, self.population[k].x) 
+            y = tools.interpolate(a, self.population[j].y, self.population[k].y)
+            deviationX = tools.interpolate(a, self.population[j].deviationX,
+                                            self.population[k].deviationX)
+            deviationY = tools.interpolate(a, self.population[j].deviationY, 
+                                            self.population[k].deviationY)
+            
+            sprite = Sprite(x, y, self.func, deviationX, deviationY, 
+                            self.population[j].generation+1)
+            
+            sprites.append(sprite)
+            
+            i = i - 1
+            
+        return sprites
+        
+        
+            

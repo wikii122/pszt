@@ -13,3 +13,8 @@ def point_generator(x, delta_x, y, delta_y):
         d_y = random.random() * 2 * delta_y - delta_y
         return (x + d_x, y + d_y)
 
+def interpolate(a, x1, x2):
+    """
+    Calculates interpolated value between x1 and x2
+    """
+    return a * x1 + (1.0 - a) * x2
