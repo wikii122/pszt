@@ -62,8 +62,9 @@ class Simulation:
         
         while i > 0:
             j = random.randint(0, len(self.population)-1)
-            #tymczasowe rozwiazanie generacji k, powinno byc j != k
-            k = random.randint(0, len(self.population)-1)
+            k = j
+            while k == j:
+                k = random.randint(0, len(self.population)-1)
             a = random.random()
             x = tools.interpolate(a, self.population[j].x, self.population[k].x) 
             y = tools.interpolate(a, self.population[j].y, self.population[k].y)
