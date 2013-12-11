@@ -19,6 +19,8 @@ class SimulationWrapper(QThread):
         Function used to handle the signal of starting the simulation.
         """
         self.simulation = Simulation() # TODO missing arguments
+        self.running = True
+        super(SimulationWrapper, self).start()
 
     def pause(self):
         """
@@ -36,5 +38,9 @@ class SimulationWrapper(QThread):
     def run(self):
         if not self.simulation:
             raise ValueError("Simulation not initialised")
-        while not self.running:
+        while self.running:
             self.simulation.step()
+
+    def __del__(self):
+        self.running = False
+        self.wait()  # TODO: Check if quitting correctly
