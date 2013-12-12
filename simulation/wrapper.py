@@ -17,10 +17,6 @@ class SimulationWrapper(QThread):
         self.simulation = None
         self.running = False
 
-    def start(self):
-        self.start_()
-        super(SimulationWrapper, self).start()
-
     def update_graph(self):
         """
         Function used to generate new graph and send appropiate signal to
@@ -29,12 +25,13 @@ class SimulationWrapper(QThread):
         pass  # TODO: make this
 
     @Slot()
-    def start_(self):
+    def start(self):
         """
         Function used to handle the signal of starting the simulation.
         """
         self.simulation = Simulation() # TODO missing arguments
         self.running = True
+        super(SimulationWrapper, self).start()
 
     @Slot()
     def pause(self):
