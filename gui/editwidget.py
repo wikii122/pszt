@@ -55,7 +55,7 @@ class EditWidget(QtGui.QWidget):
         if not self.labels:
             raise Exception("Button pushed before GUI initialization finished")
 
-        edits = map(lambda x: x.text(), self.edits)
+        edits = [x.text() for x in self.edits]
         values = {x:y for x, y in zip(self.labels, edits)}
         if self.run and self.changed:
             # Run parameters changed, prepare to run with changed
