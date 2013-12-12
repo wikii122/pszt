@@ -2,7 +2,8 @@
 Contains Sprite class definition.
 """
 from simulation import tools
-
+import math
+import random
 
 class Sprite:
     """
@@ -16,6 +17,27 @@ class Sprite:
         self.deviationX = deviationX
         self.deviationY = deviationY
         self.generation = generation
+        
+    def mutate(self):
+        tauP = 1 / 2
+        tau = 1 / math.sqrt(2 * math.sqrt(2))
+        
+        commonN = random.gauss(0, 1)
+        xN = random.gauss(0, 1)
+        yN = random.gauss(0, 1)
+        
+        self.deviationX = self.deviationX * math.exp(
+            tauP * commonN + tau * xN
+            )
+        self.deviationY = self.deviationY * math.exp(
+            tauP * commonN + tau * yN
+            )
+        
+        self.x = self.x + self.deviationX * xN
+        self.x = self.x + self.deviationY * yN
+        
+        self.value = self.fun(self.x, self.y)
+        
 
     def __gt__(self, other):
         return self.value > other.value

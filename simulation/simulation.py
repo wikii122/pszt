@@ -5,7 +5,6 @@ from simulation import tools
 from simulation.sprite import Sprite
 import random
 
-
 class Simulation:
     """
     Instance of this class represents simulated world
@@ -45,7 +44,8 @@ class Simulation:
         self.steps += 1
         
         sprites = self.crossover()
-
+        sprites = self.mutate(sprites)
+        
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
 
@@ -82,5 +82,10 @@ class Simulation:
             
         return sprites
         
+    def mutate(self, sprites):
         
+        for sprite in sprites:
+            sprite.mutate()
+            
+        return sprites
             
