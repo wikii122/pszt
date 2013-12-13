@@ -5,11 +5,7 @@ Wrapper for simulation class.
 from PySide.QtCore import QThread, Slot, Signal
 from simulation.simulation import Simulation
 
-# TODO Check if synchronisation works. Also, I'm not sure if one of
-# other components sends signal, will this thread apply to it, or does
-# this thread's main block all main event loop for it. Actually, event
-# handling for this thread is not even started, that's the reason of my
-# doubts.
+# TODO Check if synchronisation works.
 
 class SimulationWrapper(QThread):
     """
@@ -54,20 +50,24 @@ class SimulationWrapper(QThread):
         Function used to handle the signal of continuation of the simulation.
         """
         self.running = True
-        self.start()
+        super(SimulationWrapper, self).start()
 
     def run(self):
         if not self.simulation:
             raise ValueError("Simulation not initialised")
-        while self.running:
+
+        while self.running and not self.simulation.condition():
             res = self.simulation.step()
-            # TODO test this signal performane. May be quite a
+            # TODO test this signal performance. May be quite a
             # bottleneck. This may be needed to be run every 0.2 second
             # or at least every 200 steps. Also, this function may need
             # minimal sleep after every step, for main thread to get
             # over control and deal with new events.
             self.updated.emit(res)
 
+        if self.simulation.condition():
+            self.running = False
+
     def __del__(self):
         self.running = False
-        self.wait()  # TODO: Check if quitting correctly
+        self.wait()
