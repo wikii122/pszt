@@ -102,10 +102,6 @@ class EditWidget(QtGui.QWidget):
         """
         Slot handling event of stopping simulation.
         """
-        #pass  # TODO
-        QtGui.QMessageBox.question(self, 'Message',
-        "Are you sure to quit?", QtGui.QMessageBox.Yes |
-                                 QtGui.QMessageBox.No, QtGui.QMessageBox.No)
         self.run = False
         self.changed = True
         self.button.setText("&Run!")
