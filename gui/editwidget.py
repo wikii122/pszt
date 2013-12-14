@@ -23,13 +23,12 @@ class EditWidget(QtGui.QWidget):
         self.labels = None
         self.run = False
         self.changed = True
-        self.sim = sim
 
         self.start_simulation.connect(sim.start)
         self.pause_simulation.connect(sim.pause)
         self.continue_simulation.connect(sim.continue_)
 
-        sim.finished.connect(self.finished)
+        sim.simulation_end.connect(self.finished)
 
     def set_labels(self, labels):
         """
@@ -107,9 +106,8 @@ class EditWidget(QtGui.QWidget):
         QtGui.QMessageBox.question(self, 'Message',
         "Are you sure to quit?", QtGui.QMessageBox.Yes |
                                  QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-        if self.sim.condition():
-            self.run = False
-            self.changed = True
-            self.button.setText("&Run!")
-            # TODO finalize process
+        self.run = False
+        self.changed = True
+        self.button.setText("&Run!")
+        # TODO finalize process
 

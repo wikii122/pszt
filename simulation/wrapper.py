@@ -16,6 +16,7 @@ class SimulationWrapper(QThread):
 
     graph_changed = Signal(object)  # TODO type needs to be precised
     updated = Signal(list)
+    simulation_end = Signal()
 
     def __init__(self, parent=None):
         super(SimulationWrapper, self).__init__()#parent)
@@ -72,6 +73,7 @@ class SimulationWrapper(QThread):
 
         if self.condition():
             self.running = False
+            self.simulation_end.emit()
 
     def __del__(self):
         self.running = False
