@@ -5,6 +5,8 @@ Wrapper for simulation class.
 from PySide.QtCore import QThread, Slot, Signal
 from simulation.simulation import Simulation
 
+FUNCTION = lambda x1, x2: (4. * x1**2 - 2.1 * x1**4 + (1./3.) * x1**6 + \
+                           x1 * x2 - 4 * x2**2 + 4 * x2**4 )
 # TODO Check if synchronisation works.
 
 class SimulationWrapper(QThread):
@@ -16,7 +18,7 @@ class SimulationWrapper(QThread):
     updated = Signal(list)
 
     def __init__(self, parent=None):
-        super(SimulationWrapper, self).__init__(parent)
+        super(SimulationWrapper, self).__init__()#parent)
         self.simulation = None
         self.running = False
 
@@ -27,19 +29,20 @@ class SimulationWrapper(QThread):
         """
         pass  # TODO: make this
 
-    @Slot()
-    def start(self):
+    @Slot(dict)
+    def start(self, param):
         """
-        Function used to handle the signal of starting the simulation.
+        Slot used to handle the event of starting the simulation.
         """
-        self.simulation = Simulation() # TODO missing arguments
+        if param:
+            self.simulation = Simulation(FUNCTION) # TODO missing arguments
         self.running = True
         super(SimulationWrapper, self).start()
 
     @Slot()
     def pause(self):
         """
-        Function used to handle the signal of stopping the simulation.
+        Slot used to handle the event of stopping the simulation.
         """
         self.running = False
         # TODO refresh graph
@@ -47,7 +50,7 @@ class SimulationWrapper(QThread):
     @Slot()
     def continue_(self):
         """
-        Function used to handle the signal of continuation of the simulation.
+        Slot used to handle the event of continuation of the simulation.
         """
         self.running = True
         super(SimulationWrapper, self).start()
@@ -65,9 +68,12 @@ class SimulationWrapper(QThread):
             # over control and deal with new events.
             self.updated.emit(res)
 
-        if self.simulation.condition():
+        if self.condition():
             self.running = False
 
     def __del__(self):
         self.running = False
         self.wait()
+
+    def condition(self):
+        return self.simulation.condition()

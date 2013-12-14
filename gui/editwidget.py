@@ -1,14 +1,20 @@
 """
 Widget used to handle edit fields.
 """
+from time import sleep
 from PySide import QtGui, QtCore
+from simulation import Simulation
 
 
 class EditWidget(QtGui.QWidget):
     """
     Widget used for handling input.
     """
-    def __init__(self, *args, **kwarg):
+    start_simulation = QtCore.Signal(dict)
+    pause_simulation = QtCore.Signal()
+    continue_simulation = QtCore.Signal()
+
+    def __init__(self, sim=Simulation(), *args, **kwarg):
         super(EditWidget, self).__init__(*args, **kwarg)
         self.main_layout = QtGui.QVBoxLayout()
         self.edits = list()
@@ -16,7 +22,14 @@ class EditWidget(QtGui.QWidget):
         self.button.clicked.connect(self.push_button)
         self.labels = None
         self.run = False
-        self.changed = False
+        self.changed = True
+        self.sim = sim
+
+        self.start_simulation.connect(sim.start)
+        self.pause_simulation.connect(sim.pause)
+        self.continue_simulation.connect(sim.continue_)
+
+        sim.finished.connect(self.finished)
 
     def set_labels(self, labels):
         """
@@ -38,6 +51,7 @@ class EditWidget(QtGui.QWidget):
         self.changed = True
         if not self.run:
             self.button.setText("&Run!")
+        sleep(0.1)
 
     def show(self):
         """
@@ -55,28 +69,47 @@ class EditWidget(QtGui.QWidget):
         if not self.labels:
             raise Exception("Button pushed before GUI initialization finished")
 
-        values = {x:y.text() for x, y in zip(self.labels, self.edits)}
 
-        if self.run and self.changed:
-            # Run parameters changed, prepare to run with changed
-            # parameters.
-            self.run = False
-            self.changed = False
-            self.button.setText("&Run!")
-            # TODO send correct signal to simulation
-        elif self.run:
-            # Continue to run with old parameters
-            self.run = False
-            self.button.setText("&Continue!")
-            # TODO send correct signal to simulation
-        else:
-            # Start running with current parameters
-            for x in values:
-                if not values[x]:
-                    # TODO make this more subtle.
-                    QtGui.QMessageBox.question(self, 'Message', "Empty field!")
-                    return
+        if not self.run:
+            values = dict()
+
+            if self.changed:
+                # Start running with current parameters
+                values = {x:y.text() for x, y in zip(self.labels, self.edits)}
+                for x in values:
+                    if not values[x]:
+                        # TODO make this more subtle.
+                        QtGui.QMessageBox.question(self, 'Message', "Empty field!")
+                        return
+
             self.run = True
             self.changed = False
             self.button.setText("&Stop!")
-            # TODO send correct signal to simulation
+            self.start_simulation.emit(values)
+            sleep(0.1)
+        else:
+            # Stop simulation without updating new parameters.
+            self.run = False
+            if not self.changed:
+                self.button.setText("&Continue!")
+            else:
+                self.button.setText("&Run!")
+            self.pause_simulation.emit()
+            sleep(0.1)
+
+
+    @QtCore.Slot()
+    def finished(self):
+        """
+        Slot handling event of stopping simulation.
+        """
+        #pass  # TODO
+        QtGui.QMessageBox.question(self, 'Message',
+        "Are you sure to quit?", QtGui.QMessageBox.Yes |
+                                 QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+        if self.sim.condition():
+            running = False
+            changed = True
+            self.button.setText("&Run!")
+            # TODO finalize process
+
