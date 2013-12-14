@@ -7,7 +7,7 @@ from simulation.simulation import Simulation
 
 FUNCTION = lambda x1, x2: (4. * x1**2 - 2.1 * x1**4 + (1./3.) * x1**6 + \
                            x1 * x2 - 4 * x2**2 + 4 * x2**4 )
-# TODO Check if synchronisation works.
+
 
 class SimulationWrapper(QThread):
     """
@@ -37,7 +37,6 @@ class SimulationWrapper(QThread):
         if 'lambda' in param:
             param['lambda_'] = param['lambda']
             del param['lambda']
-        if param:
             self.simulation = Simulation(FUNCTION, **param) # TODO missing arguments
         self.running = True
         super(SimulationWrapper, self).start()

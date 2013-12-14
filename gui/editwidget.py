@@ -108,8 +108,8 @@ class EditWidget(QtGui.QWidget):
         "Are you sure to quit?", QtGui.QMessageBox.Yes |
                                  QtGui.QMessageBox.No, QtGui.QMessageBox.No)
         if self.sim.condition():
-            running = False
-            changed = True
+            self.run = False
+            self.changed = True
             self.button.setText("&Run!")
             # TODO finalize process
 
