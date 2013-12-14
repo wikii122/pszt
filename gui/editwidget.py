@@ -75,7 +75,7 @@ class EditWidget(QtGui.QWidget):
 
             if self.changed:
                 # Start running with current parameters
-                values = {x:y.text() for x, y in zip(self.labels, self.edits)}
+                values = {x:int(y.text()) for x, y in zip(self.labels, self.edits)}
                 for x in values:
                     if not values[x]:
                         # TODO make this more subtle.

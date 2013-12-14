@@ -34,8 +34,11 @@ class SimulationWrapper(QThread):
         """
         Slot used to handle the event of starting the simulation.
         """
+        if 'lambda' in param:
+            param['lambda_'] = param['lambda']
+            del param['lambda']
         if param:
-            self.simulation = Simulation(FUNCTION) # TODO missing arguments
+            self.simulation = Simulation(FUNCTION, **param) # TODO missing arguments
         self.running = True
         super(SimulationWrapper, self).start()
 
