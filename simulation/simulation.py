@@ -44,7 +44,8 @@ class Simulation:
     def step(self, prints=True):
         self.steps += 1
         
-        sprites = self.crossover()
+        sprites = self.create_new_population()
+        sprites = self.crossover(sprites)
 
         sprites = sorted(sprites)
         self.population = sprites[:self.mi]
@@ -55,30 +56,51 @@ class Simulation:
 
     def condition(self):
         return abs(self.population[0] - self.population[-1]) < self.epsilon
-        
-    def crossover(self):
-        sprites = list()
+    
+    def create_new_population(self):
         i = self.lambda_
+        sprites = list()
         
         while i > 0:
-            j = random.randint(0, len(self.population)-1)
-            #tymczasowe rozwiazanie generacji k, powinno byc j != k
-            k = random.randint(0, len(self.population)-1)
-            a = random.random()
-            x = tools.interpolate(a, self.population[j].x, self.population[k].x) 
-            y = tools.interpolate(a, self.population[j].y, self.population[k].y)
-            deviationX = tools.interpolate(a, self.population[j].deviationX,
-                                            self.population[k].deviationX)
-            deviationY = tools.interpolate(a, self.population[j].deviationY, 
-                                            self.population[k].deviationY)
+            j = random.randint(0, len(self.population) - 1)
+            sprites.append(self.population[j])
+            i -= 1
             
+        return sprites
+        
+    def crossover(self, population):
+        sprites = list()
+        population_idx = 0
+        
+        for member in population:
+            a = random.random()
+            
+            """
+            there are n-2 possible slots to select sprite to crossover with,
+            but randomized value can only be used as index if its less than
+            currently processed index, if its equal or higher then we have to
+            normalize it by adding 1 to match full range of index values
+            """
+            i = random.randint(0, len(self.population) - 2)
+            
+            if (i >= population_idx):
+                i += 1
+                
+            x = tools.interpolate(a, member.x, population[i].x)
+            y = tools.interpolate(a, member.y, population[i].y)
+            
+            deviationX = tools.interpolate(a, member.deviationX,
+                                        population[i].deviationY)
+            deviationY = tools.interpolate(a, member.deviationY, 
+                                        population[i].deviationY)
+                
             sprite = Sprite(x, y, self.func, deviationX, deviationY, 
-                            self.population[j].generation+1)
+                            member.generation + 1)
             
             sprites.append(sprite)
             
-            i = i - 1
-            
+            population_idx += 1
+
         return sprites
         
         
