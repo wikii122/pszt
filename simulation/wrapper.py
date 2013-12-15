@@ -38,7 +38,7 @@ class SimulationWrapper(QThread):
         if 'lambda' in param:
             param['lambda_'] = param['lambda']
             del param['lambda']
-            self.simulation = Simulation(FUNCTION, **param) # TODO missing arguments
+            self.simulation = Simulation(FUNCTION, **param)
         self.running = True
         super(SimulationWrapper, self).start()
 

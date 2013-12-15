@@ -73,16 +73,24 @@ class EditWidget(QtGui.QWidget):
 
 
         if not self.run:
+            # Actually, this can be written a lot prettier
             values = dict()
-
             if self.changed:
                 # Start running with current parameters
-                values = {x:int(y.text()) for x, y in zip(self.labels, self.edits)}
-                for x in values:
-                    if not values[x]:
-                        # TODO make this more subtle.
-                        QtGui.QMessageBox.question(self, 'Message', "Empty field!")
-                        return
+                try:
+                    values = {x:float(y.text()) for x, y in zip(self.labels, self.edits)}
+                except ValueError:
+                    # TODO: Display error message  in place of result display.
+                    self.status.showMessage("Error!")
+                    return
+                if values['lambda'] < 2 or values['mi'] < 2:
+                    # TODO: Display error message  in place of result display.
+                    self.status.showMessage("Error!")
+                    return
+                elif values['lambda'] < values['mi']:
+                    # TODO: Display error message  in place of result display.
+                    self.status.showMessage("Error!")
+                    return
 
             self.run = True
             self.changed = False
