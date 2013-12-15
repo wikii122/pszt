@@ -11,10 +11,6 @@ import random
 
 from argparse import ArgumentParser
 
-path = os.path.dirname(sys.argv[0])
-path = os.path.abspath(path)
-sys.path.append(path)
-
 from simulation import Simulation
 from gui.app import Application
 
