@@ -19,8 +19,8 @@ class Sprite:
         self.generation = generation
         
     def mutate(self):
-        tauP = 1 / 2
-        tau = 1 / math.sqrt(2 * math.sqrt(2))
+        tauP = 1.0 / 2.0
+        tau = 1.0 / math.sqrt(2.0 * math.sqrt(2.0))
         
         commonN = random.gauss(0, 1)
         xN = random.gauss(0, 1)
@@ -34,10 +34,9 @@ class Sprite:
             )
         
         self.x = self.x + self.deviationX * xN
-        self.x = self.x + self.deviationY * yN
+        self.y = self.y + self.deviationY * yN
         
         self.value = self.fun(self.x, self.y)
-        
 
     def __gt__(self, other):
         return self.value > other.value
