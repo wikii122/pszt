@@ -13,15 +13,15 @@ class Window(QtGui.QMainWindow):
 
     labels = ['mi', 'lambda']
     size = (600, 350)
-    def __init__(self, *args, **kwarg):
-        super(Window, self).__init__(*args, **kwarg)
+    def __init__(self, simulation):
+        super(Window, self).__init__()
 
-        edits = EditWidget()
+        edits = EditWidget(sim=simulation, parent=self, status=self.statusBar())
         edits.set_labels(self.labels)
         edits.setMaximumWidth(150)
         edits.show()
 
-        graph = GraphWidget()
+        graph = GraphWidget(sim=simulation, parent=self)
         graph.setMaximumWidth(450)
         graph.setMinimumWidth(450)
         graph.show()

@@ -11,9 +11,10 @@ class Application(QtGui.QApplication):
     """
     Main application representation.
     """
-    def __init__(self):
+    def __init__(self, simulation):
         super(Application, self).__init__(sys.argv)
-        self.frame = Window()
+        self.frame = Window(simulation=simulation)
+        self.sim = simulation
         self.frame.show()
 
     def run(self):

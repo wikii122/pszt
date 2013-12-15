@@ -3,7 +3,6 @@ Widget used to handle edit fields.
 """
 from time import sleep
 from PySide import QtGui, QtCore
-from simulation import Simulation
 
 
 class EditWidget(QtGui.QWidget):
@@ -14,8 +13,8 @@ class EditWidget(QtGui.QWidget):
     pause_simulation = QtCore.Signal()
     continue_simulation = QtCore.Signal()
 
-    def __init__(self, sim=Simulation(), *args, **kwarg):
-        super(EditWidget, self).__init__(*args, **kwarg)
+    def __init__(self, sim, parent=None, status=None):
+        super(EditWidget, self).__init__(parent=parent)
         self.main_layout = QtGui.QVBoxLayout()
         self.edits = list()
         self.button = QtGui.QPushButton("&Run!", self)
@@ -23,10 +22,12 @@ class EditWidget(QtGui.QWidget):
         self.labels = None
         self.run = False
         self.changed = True
+        self.status = status
 
         self.start_simulation.connect(sim.start)
         self.pause_simulation.connect(sim.pause)
         self.continue_simulation.connect(sim.continue_)
+        self.destroyed.connect(sim.terminate)
 
         sim.simulation_end.connect(self.finished)
 
@@ -50,6 +51,8 @@ class EditWidget(QtGui.QWidget):
         self.changed = True
         if not self.run:
             self.button.setText("&Run!")
+            if self.status:
+                self.status.showMessage("Ready")
         sleep(0.1)
 
     def show(self):
@@ -84,6 +87,8 @@ class EditWidget(QtGui.QWidget):
             self.run = True
             self.changed = False
             self.button.setText("&Stop!")
+            if self.status:
+                self.status.showMessage("Running!")
             self.start_simulation.emit(values)
             sleep(0.1)
         else:
@@ -91,8 +96,12 @@ class EditWidget(QtGui.QWidget):
             self.run = False
             if not self.changed:
                 self.button.setText("&Continue!")
+                if self.status:
+                    self.status.showMessage("Paused!")
             else:
                 self.button.setText("&Run!")
+                if self.status:
+                    self.status.showMessage("Ready!")
             self.pause_simulation.emit()
             sleep(0.1)
 
@@ -105,5 +114,7 @@ class EditWidget(QtGui.QWidget):
         self.run = False
         self.changed = True
         self.button.setText("&Run!")
+        if self.status:
+            self.status.showMessage("Ready!")
         # TODO finalize process
 

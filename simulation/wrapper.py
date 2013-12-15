@@ -76,8 +76,9 @@ class SimulationWrapper(QThread):
             self.simulation_end.emit()
 
     def __del__(self):
-        self.running = False
-        self.wait()
+        #self.running = False
+        #self.wait()
+        pass
 
     def condition(self):
         return self.simulation.condition()

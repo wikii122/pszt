@@ -8,5 +8,5 @@ class GraphWidget(QtGui.QWidget):
     Displays graph.
     Will provide interface in future.
     """
-    def __init__(self, *args, **kwarg):
-        super(GraphWidget, self).__init__(*args, **kwarg)
+    def __init__(self, sim, parent=None):
+        super(GraphWidget, self).__init__(parent)

@@ -27,9 +27,7 @@ def run():
     Main function of program, it's used to create and start the simulation
     """
     sim = Simulation(FUNCTION)
-    app = Application()
-    # TODO
-    #app.set_simulation(sim)
+    app = Application(sim)
     app.run()
 
 if __name__ == "__main__":
