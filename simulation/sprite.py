@@ -26,15 +26,11 @@ class Sprite:
         xN = random.gauss(0, 1)
         yN = random.gauss(0, 1)
         
-        self.deviationX = self.deviationX * math.exp(
-            tauP * commonN + tau * xN
-            )
-        self.deviationY = self.deviationY * math.exp(
-            tauP * commonN + tau * yN
-            )
+        self.deviationX *= math.exp(tauP * commonN + tau * xN)
+        self.deviationY *= math.exp(tauP * commonN + tau * yN)
         
-        self.x = self.x + self.deviationX * xN
-        self.y = self.y + self.deviationY * yN
+        self.x = self.x + self.deviationX * random.gauss(0, 1)
+        self.y = self.y + self.deviationY * random.gauss(0, 1)
         
         self.value = self.fun(self.x, self.y)
 

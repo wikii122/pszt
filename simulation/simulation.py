@@ -20,6 +20,7 @@ class Simulation:
         self.initial_spawn()
         self.steps = 0
         self.epsilon = 0.000001
+        self.mutation_chance = 0.05
 
     def run(self, prints=True):
         while not self.condition():
@@ -37,7 +38,7 @@ class Simulation:
             coord = tools.point_generator(x=0, delta_x=3,
                                           y=0, delta_y=3)
             mi -= 1
-            sprite = Sprite(*coord, fun=self.func, deviationX=10, deviationY=10)
+            sprite = Sprite(*coord, fun=self.func, deviationX=1.0, deviationY=1.0)
             self.population.append(sprite)
 
     def step(self, prints=True):
@@ -48,6 +49,7 @@ class Simulation:
         sprites = self.mutate(sprites)
 
         sprites = sorted(sprites)
+            
         self.population = sprites[:self.mi]
 
         if not self.steps % 10 and prints:
@@ -106,7 +108,8 @@ class Simulation:
     def mutate(self, sprites):
         
         for sprite in sprites:
-            sprite.mutate()
+            if random.random() < self.mutation_chance:
+                sprite.mutate()
             
         return sprites
             
