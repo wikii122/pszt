@@ -53,7 +53,7 @@ class EditWidget(QtGui.QWidget):
             self.button.setText("&Run!")
             if self.status:
                 self.status.showMessage("Ready")
-        sleep(0.1)
+        sleep(0.001)
 
     def show(self):
         """
@@ -98,7 +98,7 @@ class EditWidget(QtGui.QWidget):
             if self.status:
                 self.status.showMessage("Running!")
             self.start_simulation.emit(values)
-            sleep(0.1)
+            sleep(0.001)
         else:
             # Stop simulation without updating new parameters.
             self.run = False
@@ -111,7 +111,7 @@ class EditWidget(QtGui.QWidget):
                 if self.status:
                     self.status.showMessage("Ready!")
             self.pause_simulation.emit()
-            sleep(0.1)
+            sleep(0.001)
 
 
     @QtCore.Slot()

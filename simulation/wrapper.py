@@ -2,6 +2,7 @@
 Wrapper for simulation class.
 """
 
+from time import sleep
 from PySide.QtCore import QThread, Slot, Signal
 from simulation.simulation import Simulation
 
@@ -19,7 +20,7 @@ class SimulationWrapper(QThread):
     simulation_end = Signal()
 
     def __init__(self, parent=None):
-        super(SimulationWrapper, self).__init__()#parent)
+        super(SimulationWrapper, self).__init__()
         self.simulation = None
         self.running = False
 
@@ -70,6 +71,7 @@ class SimulationWrapper(QThread):
             # minimal sleep after every step, for main thread to get
             # over control and deal with new events.
             self.updated.emit(res)
+            sleep(0.00001)
 
         if self.condition():
             self.running = False
