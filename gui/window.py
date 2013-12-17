@@ -11,7 +11,10 @@ class Window(QtGui.QMainWindow):
     Main window frame.
     """
 
-    labels = ['mi', 'lambda']
+    labels = {
+             'mi'       :(10,),
+             'lambda'   :(20,)
+             }
     size = (600, 350)
     def __init__(self, simulation):
         super(Window, self).__init__()

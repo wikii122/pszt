@@ -37,9 +37,10 @@ class EditWidget(QtGui.QWidget):
         """
         self.layout = QtGui.QFormLayout()
         self.labels = labels
-        for label in labels:
+        for label, params in labels.items():
             edit = QtGui.QLineEdit()
             edit.setValidator(QtGui.QIntValidator(edit))
+            edit.setText(str(params[0]))
             edit.textChanged.connect(self.change)
             self.layout.addRow(QtGui.QLabel(label), edit)
             self.edits.append(edit)
