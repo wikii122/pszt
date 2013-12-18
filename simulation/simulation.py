@@ -19,8 +19,11 @@ class Simulation:
         self.population = list()
         self.initial_spawn()
         self.steps = 0
-        self.epsilon = 0.000001
+        self.epsilon = 0.00001
         self.mutation_chance = 0.05
+        self.mutation_num = 0
+        self.mutation_success = 0
+        self.deviation_coefficient = 1.0
 
     def run(self, prints=True):
         while not self.condition():
@@ -38,7 +41,7 @@ class Simulation:
             coord = tools.point_generator(x=0, delta_x=3,
                                           y=0, delta_y=3)
             mi -= 1
-            sprite = Sprite(*coord, fun=self.func, deviationX=1.0, deviationY=1.0)
+            sprite = Sprite(*coord, fun=self.func, deviationX=0.5, deviationY=0.5)
             self.population.append(sprite)
 
     def step(self, prints=True):
@@ -67,6 +70,10 @@ class Simulation:
             j = random.randint(0, len(self.population) - 1)
             sprites.append(self.population[j])
             i -= 1
+            
+        for sprite in sprites:
+            sprite.deviationX *= self.deviation_coefficient
+            sprite.deviationY *= self.deviation_coefficient
             
         return sprites
         
@@ -109,7 +116,23 @@ class Simulation:
         
         for sprite in sprites:
             if random.random() < self.mutation_chance:
+                val = sprite.value
                 sprite.mutate()
-            
+                if sprite.value < val:
+                    self.mutation_success += 1
+                    
+                if self.mutation_num == 10 :
+                    if self.mutation_success > 2 :
+                        self.deviation_coefficient = 1.2
+                    elif self.mutation_success < 2 :
+                        self.deviation_coefficient = 0.82
+                    else :
+                        self.deviation_coefficient = 1.0
+                    
+                    self.mutation_success = 0
+                    self.mutation_num = 0
+                    
+                self.mutation_num += 1
+                
         return sprites
             
