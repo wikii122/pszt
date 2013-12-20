@@ -22,7 +22,7 @@ class Simulation:
         self.epsilon = 0.00001
         self.mutation_chance = 0.05
         self.mutation_num = 0
-        self.mutation_success = 0
+        self.iteration_success = 0
         self.deviation_coefficient = 1.0
 
     def run(self, prints=True):
@@ -43,6 +43,7 @@ class Simulation:
             mi -= 1
             sprite = Sprite(*coord, fun=self.func, deviationX=0.5, deviationY=0.5)
             self.population.append(sprite)
+            self.population = sorted(self.population)
 
     def step(self, prints=True):
         self.steps += 1
@@ -52,10 +53,23 @@ class Simulation:
         sprites = self.mutate(sprites)
 
         sprites = sorted(sprites)
-            
+        
+        if sprites[0] < self.population[0] :
+            self.iteration_success += 1
+        
         self.population = sprites[:self.mi]
 
         if not self.steps % 10 and prints:
+        
+            if self.iteration_success > 2 :
+                self.deviation_coefficient = 1.2
+            elif self.iteration_success < 2 :
+                self.deviation_coefficient = 0.82
+            else :
+                self.deviation_coefficient = 1.0
+            
+            self.iteration_success = 0
+        
             print("Step {step}:".format(step=self.steps))
             print(str(self.population[0]))
 
@@ -98,12 +112,12 @@ class Simulation:
             x = tools.interpolate(a, member.x, population[i].x)
             y = tools.interpolate(a, member.y, population[i].y)
             
-            deviationX = tools.interpolate(a, member.deviationX,
-                                        population[i].deviationY)
-            deviationY = tools.interpolate(a, member.deviationY, 
-                                        population[i].deviationY)
+            #deviationX = tools.interpolate(a, member.deviationX,
+            #                            population[i].deviationY)
+            #deviationY = tools.interpolate(a, member.deviationY, 
+            #                            population[i].deviationY)
                 
-            sprite = Sprite(x, y, self.func, deviationX, deviationY, 
+            sprite = Sprite(x, y, self.func, member.deviationX, member.deviationY, 
                             member.generation + 1)
             
             sprites.append(sprite)
@@ -116,23 +130,7 @@ class Simulation:
         
         for sprite in sprites:
             if random.random() < self.mutation_chance:
-                val = sprite.value
                 sprite.mutate()
-                if sprite.value < val:
-                    self.mutation_success += 1
-                    
-                if self.mutation_num == 10 :
-                    if self.mutation_success > 2 :
-                        self.deviation_coefficient = 1.2
-                    elif self.mutation_success < 2 :
-                        self.deviation_coefficient = 0.82
-                    else :
-                        self.deviation_coefficient = 1.0
-                    
-                    self.mutation_success = 0
-                    self.mutation_num = 0
-                    
-                self.mutation_num += 1
                 
         return sprites
             
