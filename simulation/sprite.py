@@ -25,13 +25,13 @@ class Sprite:
         commonN = random.gauss(0, 1)
         xN = random.gauss(0, 1)
         yN = random.gauss(0, 1)
-        #print("commonN = {0}, xN = {1}, yN = {2}".format(commonN, xN, yN))
-        print("devX = {0}, devY = {1}".format(self.deviationX, self.deviationY))
         self.deviationX *= math.exp(tauP * commonN + tau * xN)
         self.deviationY *= math.exp(tauP * commonN + tau * yN)
         
         self.x = self.x + self.deviationX * random.gauss(0, 1)
         self.y = self.y + self.deviationY * random.gauss(0, 1)
+        
+        tools.apply_bounds(self)
         
         self.value = self.fun(self.x, self.y)
 

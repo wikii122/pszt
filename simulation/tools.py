@@ -18,3 +18,15 @@ def interpolate(a, x1, x2):
     Calculates interpolated value between x1 and x2
     """
     return a * x1 + (1.0 - a) * x2
+
+def apply_bounds(sprite):
+    
+    if sprite.x < -2.0:
+        sprite.x = -2.0
+    elif sprite.x > 2.0:
+        sprite.x = 2.0
+        
+    if sprite.y < -2.0:
+        sprite.y = -2.0
+    elif sprite.y > 2.0:
+        sprite.y = 2.0

@@ -21,9 +21,6 @@ class Simulation:
         self.steps = 0
         self.epsilon = 0.00001
         self.mutation_chance = 0.05
-        self.mutation_num = 0
-        self.iteration_success = 0
-        self.deviation_coefficient = 1.0
 
     def run(self, prints=True):
         while not self.condition():
@@ -38,8 +35,8 @@ class Simulation:
     def initial_spawn(self):
         mi = self.mi
         while mi:
-            coord = tools.point_generator(x=0, delta_x=3,
-                                          y=0, delta_y=3)
+            coord = tools.point_generator(x=0, delta_x=2,
+                                          y=0, delta_y=2)
             mi -= 1
             sprite = Sprite(*coord, fun=self.func, deviationX=0.5, deviationY=0.5)
             self.population.append(sprite)
@@ -54,22 +51,9 @@ class Simulation:
 
         sprites = sorted(sprites)
         
-        if sprites[0] < self.population[0] :
-            self.iteration_success += 1
-        
         self.population = sprites[:self.mi]
 
         if not self.steps % 10 and prints:
-        
-            if self.iteration_success > 2 :
-                self.deviation_coefficient = 1.2
-            elif self.iteration_success < 2 :
-                self.deviation_coefficient = 0.82
-            else :
-                self.deviation_coefficient = 1.0
-            
-            self.iteration_success = 0
-        
             print("Step {step}:".format(step=self.steps))
             print(str(self.population[0]))
 
@@ -84,10 +68,6 @@ class Simulation:
             j = random.randint(0, len(self.population) - 1)
             sprites.append(self.population[j])
             i -= 1
-            
-        for sprite in sprites:
-            sprite.deviationX *= self.deviation_coefficient
-            sprite.deviationY *= self.deviation_coefficient
             
         return sprites
         
@@ -112,13 +92,15 @@ class Simulation:
             x = tools.interpolate(a, member.x, population[i].x)
             y = tools.interpolate(a, member.y, population[i].y)
             
-            #deviationX = tools.interpolate(a, member.deviationX,
-            #                            population[i].deviationY)
-            #deviationY = tools.interpolate(a, member.deviationY, 
-            #                            population[i].deviationY)
+            deviationX = tools.interpolate(a, member.deviationX,
+                                        population[i].deviationY)
+            deviationY = tools.interpolate(a, member.deviationY, 
+                                        population[i].deviationY)
                 
             sprite = Sprite(x, y, self.func, member.deviationX, member.deviationY, 
                             member.generation + 1)
+                            
+            tools.apply_bounds(sprite)
             
             sprites.append(sprite)
             
