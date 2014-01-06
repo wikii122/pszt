@@ -20,7 +20,9 @@ def interpolate(a, x1, x2):
     return a * x1 + (1.0 - a) * x2
 
 def apply_bounds(sprite):
-    
+    """
+    Applies bounds to sprite's coordinates
+    """
     if sprite.x < -2.0:
         sprite.x = -2.0
     elif sprite.x > 2.0:

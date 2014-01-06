@@ -28,8 +28,8 @@ class Sprite:
         self.deviationX *= math.exp(tauP * commonN + tau * xN)
         self.deviationY *= math.exp(tauP * commonN + tau * yN)
         
-        self.x = self.x + self.deviationX * random.gauss(0, 1)
-        self.y = self.y + self.deviationY * random.gauss(0, 1)
+        self.x += self.deviationX * random.gauss(0, 1)
+        self.y += self.deviationY * random.gauss(0, 1)
         
         tools.apply_bounds(self)
         
