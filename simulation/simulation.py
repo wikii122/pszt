@@ -10,6 +10,7 @@ class Simulation:
     Instance of this class represents simulated world
     """
     def __init__(self, func, mi=100, lambda_=10):
+        mi, lambda_ = map(int, [mi, lambda_])
         if mi <= 1 or lambda_ <= 1:
             raise ValueError("Unsupported parameters")
 
