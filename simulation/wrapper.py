@@ -17,7 +17,7 @@ class SimulationWrapper(QThread):
     Control interface for simulation and separate thread used for running it.
     """
 
-    graph_changed = Signal(object)  # TODO type needs to be precised
+    graph_changed = Signal(object)  
     updated = Signal(list)
     simulation_end = Signal()
 
@@ -25,9 +25,10 @@ class SimulationWrapper(QThread):
         super(SimulationWrapper, self).__init__()
         self.simulation = None
         self.running = False
+
         self.graphtimer = 0
-        self.i = 0
-        self.graphname = ''
+        self.graphSize = 3
+
     def update_graph(self):
         """
         Function used to generate new graph and send appropiate signal to
@@ -36,9 +37,11 @@ class SimulationWrapper(QThread):
         min = self.simulation.population[0].x
         max = self.simulation.population[0].x
         self.graphname = self.graphtimer
-        self.xy_chart = pygal.XY(stroke=False)
-        self.xy_chart.title = "najlepszy wynik: \n" + str(self.simulation.population[0].x) + ',' + str(self.simulation.population[0].y)
+        self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 15)
+        self.xy_chart.title = "Krok "+str(self.simulation.population[0].generation)+ " \t\t\t\t\tNajlepszy wynik: " + str(self.simulation.population[0].value)
         self.i = 0
+        if self.graphtimer == 0: 
+            self.graphSize = 3
         while self.i < self.simulation.mi:
             if min > self.simulation.population[self.i].x:
                 min = self.simulation.population[self.i].x
@@ -51,19 +54,21 @@ class SimulationWrapper(QThread):
 
             self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
             self.i = self.i + 1
-            
+
         if min < 0:
             min = -min
         if max <0:
             max = -max
+        if (min > max):
+            max = min
+        
+        if max < self.graphSize :
+            if max < self.graphSize-0.05:
+                if self.graphSize > 0.8:
+                    self.graphSize = self.graphSize-0.05
 
-	
-        if min >= max:
-            min = 1.1*min
-            self.xy_chart.add('Granica', [(min, min), (-min, -min)])
-        if min < max:
-            max = 1.1*max
-            self.xy_chart.add('Granica', [(max, max), (-max, -max)])
+        self.xy_chart.add('Granica', [(self.graphSize, self.graphSize), (-self.graphSize, -self.graphSize)])
+
         GraphData = self.xy_chart.render()
         self.graph_changed.emit(GraphData)
 
@@ -96,13 +101,13 @@ class SimulationWrapper(QThread):
         super(SimulationWrapper, self).start()
 
     def run(self):
+        self.graphtimer = 0
         if not self.simulation:
             raise ValueError("Simulation not initialised")
 
 
         while self.running and not self.simulation.condition():
             res = self.simulation.step()
-            #if self.graphtimer%3 == 1:
             self.update_graph()
             self.graphtimer = self.graphtimer+1
             
