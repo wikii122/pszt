@@ -56,12 +56,9 @@ class SimulationWrapper(QThread):
         if max <0:
             max = -max
 
-	
         if min >= max:
-            min = 1.1*min
             self.xy_chart.add('Granica', [(min, min), (-min, -min)])
         if min < max:
-            max = 1.1*max
             self.xy_chart.add('Granica', [(max, max), (-max, -max)])
 
         self.xy_chart.render_to_file('taktaktak.svg')
