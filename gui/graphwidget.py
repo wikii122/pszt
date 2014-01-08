@@ -24,9 +24,6 @@ class GraphWidget(QtGui.QWidget):
     @QtCore.Slot()
     def showgraph(self):
         self.web.load(QUrl("/home/radek/pszt/taktaktak.svg"))
-        #self.web.show() 
         self.layout.addWidget(self.web)
         self.setLayout(self.layout)
-        super(GraphWidget, self).show()
-        #self.xy_chart.render_to_file('taktaktak.svg')
 
