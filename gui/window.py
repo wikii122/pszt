@@ -36,7 +36,7 @@ class Window(QtGui.QMainWindow):
 
         self.setGeometry(100, 100, *self.size)
         self.setCentralWidget(widget)
-        self.setWindowTitle("TU BYŁ RADEK")
+        self.setWindowTitle("PSZT Projekt")
         self.statusBar().showMessage('Ready')
 
     def show(self):
