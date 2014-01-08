@@ -6,6 +6,7 @@ import pygal
 from time import sleep
 from PySide.QtCore import QThread, Slot, Signal
 from simulation.simulation import Simulation
+from PySide.QtWebKit import *
 
 FUNCTION = lambda x1, x2: (4. * x1**2 - 2.1 * x1**4 + (1./3.) * x1**6 + \
                            x1 * x2 - 4 * x2**2 + 4 * x2**4 )
@@ -50,7 +51,7 @@ class SimulationWrapper(QThread):
 
             self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
             self.i = self.i + 1
-        #self.xy_chart.add('B', [(self.simulation.population[1].x, self.simulation.population[1].y)])
+            
         if min < 0:
             min = -min
         if max <0:
@@ -63,10 +64,8 @@ class SimulationWrapper(QThread):
         if min < max:
             max = 1.1*max
             self.xy_chart.add('Granica', [(max, max), (-max, -max)])
-
-        self.xy_chart.render_to_file('taktaktak.svg')
-        self.graph_changed.emit(self.graphname)
-        #pass  # TODO: make this
+        GraphData = self.xy_chart.render()
+        self.graph_changed.emit(GraphData)
 
     @Slot(dict)
     def start(self, param):

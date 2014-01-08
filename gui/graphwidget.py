@@ -12,8 +12,6 @@ from PySide.QtWebKit import *
 
 class GraphWidget(QtGui.QWidget):
 
-    #xy_chart = pygal.XY(stroke=False)
-    
     def __init__(self, sim, parent=None):
         super(GraphWidget, self).__init__(parent)
         sim.graph_changed.connect(self.showgraph)
@@ -22,8 +20,10 @@ class GraphWidget(QtGui.QWidget):
 
 
     @QtCore.Slot()
-    def showgraph(self):
-        self.web.load(QUrl("/home/radek/pszt/taktaktak.svg"))
+    def showgraph(self, data):
+
+        Qdata = QByteArray(data)
+        self.web.setContent(Qdata)
         self.layout.addWidget(self.web)
         self.setLayout(self.layout)
-
+        super(GraphWidget, self).show()
