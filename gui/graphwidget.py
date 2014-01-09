@@ -28,8 +28,17 @@ class GraphWidget(QtGui.QWidget):
         self.web.setContent(qdata)
 
     def initView(self):
-        self.xy_chart = pygal.XY(stroke=False, show_legend = False, no_data_text = '', title_font_size = 25)
+        self.xy_chart = pygal.XY(stroke=False, show_legend = False, no_data_text = 'Enter parameters', title_font_size = 25)
         self.xy_chart.title = ("Projekt PSZT- Poszukiwanie Miniumum Funkcji")
-        textData = self.xy_chart.render()
-        qdata = QtCore.QByteArray(textData)
+        text_data = self.xy_chart.render()
+        qdata = QtCore.QByteArray(text_data)
         self.web.setContent(qdata)
+
+    @QtCore.Slot(str)
+    def error(self, text):
+        self.xy_chart = pygal.XY(stroke=False, show_legend = False, no_data_text = text, title_font_size = 25)
+        self.xy_chart.title = ("Projekt PSZT- Poszukiwanie Miniumum Funkcji")
+        text_data = self.xy_chart.render()
+        qdata = QtCore.QByteArray(text_data)
+        self.web.setContent(qdata)
+
