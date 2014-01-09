@@ -12,7 +12,7 @@ class Window(QtGui.QMainWindow):
     """
 
     labels = ['mi', 'lambda']
-    size = (600, 350)
+    size = (1000, 650)
     def __init__(self, simulation):
         super(Window, self).__init__()
 
@@ -22,8 +22,8 @@ class Window(QtGui.QMainWindow):
         edits.show()
 
         graph = GraphWidget(sim=simulation, parent=self)
-        graph.setMaximumWidth(450)
-        graph.setMinimumWidth(450)
+        graph.setMaximumWidth(850)
+        graph.setMinimumWidth(850)
         graph.show()
 
         layout = QtGui.QHBoxLayout()
@@ -36,7 +36,7 @@ class Window(QtGui.QMainWindow):
 
         self.setGeometry(100, 100, *self.size)
         self.setCentralWidget(widget)
-        self.setWindowTitle("E'voile")
+        self.setWindowTitle("PSZT Projekt")
         self.statusBar().showMessage('Ready')
 
     def show(self):

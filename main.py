@@ -5,8 +5,6 @@ Program finding function minimum using evolutionary algorithm.
 
 By Andrzej Krzynówek, Wiktor Ślęczka & Radosław Więch
 """
-import os
-import sys
 import random
 
 from argparse import ArgumentParser
