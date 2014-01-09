@@ -39,6 +39,8 @@ class Window(QtGui.QMainWindow):
         self.setWindowTitle("PSZT Projekt")
         self.statusBar().showMessage('Ready')
 
+        edits.error.connect(graph.error)
+
     def show(self):
         super(Window, self).show()
         size = QtCore.QSize(*self.size)

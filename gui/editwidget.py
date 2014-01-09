@@ -12,6 +12,7 @@ class EditWidget(QtGui.QWidget):
     start_simulation = QtCore.Signal(dict)
     pause_simulation = QtCore.Signal()
     continue_simulation = QtCore.Signal()
+    error = QtCore.Signal(str)
 
     def __init__(self, sim, parent=None, status=None):
         super(EditWidget, self).__init__(parent=parent)
@@ -80,15 +81,16 @@ class EditWidget(QtGui.QWidget):
                 try:
                     values = {x:float(y.text()) for x, y in zip(self.labels, self.edits)}
                 except ValueError:
-                    # TODO: Display error message  in place of result display.
+                    self.error.emit("Bad or none value!")
                     self.status.showMessage("Error!")
                     return
                 if values['lambda'] < 2 or values['mi'] < 2:
-                    # TODO: Display error message  in place of result display.
+                    self.error.emit("Value less than 2")
                     self.status.showMessage("Error!")
                     return
                 elif values['lambda'] < values['mi']:
                     # TODO: Display error message  in place of result display.
+                    self.error.emit("Mi < lambda")
                     self.status.showMessage("Error!")
                     return
 
