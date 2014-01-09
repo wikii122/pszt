@@ -37,8 +37,8 @@ class SimulationWrapper(QThread):
         min = self.simulation.population[0].x
         max = self.simulation.population[0].x
         self.graphname = self.graphtimer
-        self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 15)
-        self.xy_chart.title = "Krok "+str(self.simulation.population[0].generation)+ " \t\t\t\t\tNajlepszy wynik: " + str(self.simulation.population[0].value)
+        self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 15, print_values = False)
+        self.xy_chart.title = "Krok "+str(self.simulation.population[0].generation)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
         self.i = 0
         if self.graphtimer == 0: 
             self.graphSize = 3
@@ -63,9 +63,9 @@ class SimulationWrapper(QThread):
             max = min
         
         if max < self.graphSize :
-            if max < self.graphSize-0.05:
+            if max < self.graphSize-0.15:
                 if self.graphSize > 0.8:
-                    self.graphSize = self.graphSize-0.05
+                    self.graphSize = self.graphSize-0.15
 
         self.xy_chart.add('Granica', [(self.graphSize, self.graphSize), (-self.graphSize, -self.graphSize)])
 
