@@ -63,7 +63,7 @@ class SimulationWrapper(QThread):
         if max_val < self.graph_size and max_val < self.graph_size-0.05 and self.graph_size > 0.8:
             self.graph_size = self.graph_size-0.05
 
-        self.xy_chart.add('Granica', [(self.graphSize, self.graphSize), (-self.graphSize, -self.graphSize)])
+        self.xy_chart.add('Granica', [(self.graph_size, self.graph_size), (-self.graph_size, -self.graph_size)])
 
         graph_data = self.xy_chart.render()
         self.graph_changed.emit(graph_data)
@@ -103,7 +103,7 @@ class SimulationWrapper(QThread):
 
 
         while self.running and not self.simulation.condition():
-            res = self.simulation.step()
+            res = self.simulation.step(prints=False)
             self.update_graph()
             self.graphtimer = self.graphtimer+1
 
