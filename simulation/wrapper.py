@@ -53,14 +53,27 @@ class SimulationWrapper(QThread):
             #self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
             self.i = self.i + 1
 
-        if localmaxX < self.maxX:
-            if localmaxY < self.maxY:
-                if localminX > self.minX:
-                    if localminY > self.minY:
-                        self.maxX = self.maxX - (self.maxX - localmaxX)/2
-                        self.maxY = self.maxY - (self.maxY - localmaxY)/2
-                        self.minX = self.minX + (localminX - self.minX)/2
-                        self.minY = self.minY + (localminY - self.minY)/2
+        deltaX = self.maxX*0.15
+        if deltaX < 0:
+            deltaX = -deltaX
+
+        deltaY = self.maxY*0.15
+        if deltaY < 0:
+            deltaY = -deltaY
+        
+        if (self.maxX - deltaX) > localmaxX < self.maxX:
+            self.maxX = self.maxX - deltaX
+        if (self.maxY - deltaY) > localmaxY < self.maxY:
+            self.maxY = self.maxY - deltaY
+        if (self.minX + deltaX) < localminX > self.minX:
+            self.minX = self.minX + deltaX
+        if (self.minY + deltaY) < localminY > self.minY:
+            self.minY = self.minY + deltaY
+        print(str(self.minX) + " , "+ str(self.maxX))               
+                        #self.maxX = self.maxX - (self.maxX - localmaxX)/2
+                        #self.maxY = self.maxY - (self.maxY - localmaxY)/2
+                        #self.minX = self.minX + (localminX - self.minX)/2
+                        #self.minY = self.minY + (localminY - self.minY)/2
         self.i = 0
 
         while self.i < self.simulation.mi:
