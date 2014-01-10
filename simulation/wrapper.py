@@ -27,8 +27,8 @@ class SimulationWrapper(QThread):
         self.running = False
         self.minX = -3
         self.minY = -3
-        self.maxX = self.maxY = 3
-        print("aaa")
+        self.maxX = 3
+        self.maxY = 3
 
     def update_graph(self):
         """
@@ -37,7 +37,7 @@ class SimulationWrapper(QThread):
         """
         localminX = localmaxX = self.simulation.population[0].x
         localminY = localmaxY = self.simulation.population[0].y
-        self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False)
+        self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
         self.xy_chart.title = "Krok "+str(self.simulation.population[0].generation)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
         self.i = 0
 
@@ -50,21 +50,23 @@ class SimulationWrapper(QThread):
                 localmaxX = self.simulation.population[self.i].x
             if localmaxY < self.simulation.population[self.i].y:
                 localmaxY = self.simulation.population[self.i].y
-            print(self.minX)
-            print(self.simulation.population[self.i].x)
-            self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
+            #self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
             self.i = self.i + 1
 
         if localmaxX < self.maxX:
             if localmaxY < self.maxY:
                 if localminX > self.minX:
                     if localminY > self.minY:
-                        self.maxX = localmaxX
-                        self.maxY = localmaxY
-                        self.minX = localminX
-                        self.minY = localminY
+                        self.maxX = self.maxX - (self.maxX - localmaxX)/2
+                        self.maxY = self.maxY - (self.maxY - localmaxY)/2
+                        self.minX = self.minX + (localminX - self.minX)/2
+                        self.minY = self.minY + (localminY - self.minY)/2
+        self.i = 0
 
-
+        while self.i < self.simulation.mi:
+            if self.minX < self.simulation.population[self.i].x < self.maxX and self.minY < self.simulation.population[self.i].y < self.maxY:
+                self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
+            self.i = self.i + 1
         self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
 
         GraphData = self.xy_chart.render()
@@ -79,9 +81,13 @@ class SimulationWrapper(QThread):
             param['lambda_'] = param['lambda']
             del param['lambda']
             self.simulation = Simulation(FUNCTION, **param)
-        res = self.simulation.step()
-        self.update_graph()
-        self.updated.emit(res)
+            res = self.simulation.step()
+            self.minX = -3
+            self.minY = -3
+            self.maxX = 3
+            self.maxY = 3
+            self.update_graph()
+            self.updated.emit(res)
         self.running = True
         super(SimulationWrapper, self).start()
     @Slot()
@@ -119,7 +125,7 @@ class SimulationWrapper(QThread):
 
         if self.condition():
             self.running = False
-           # self.minX = self.minY = -3
+            #self.minX = self.minY = -3
            # self.maxX = self.maxX = 3
             self.simulation_end.emit()
 
