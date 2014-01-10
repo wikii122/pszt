@@ -53,11 +53,32 @@ class SimulationWrapper(QThread):
             #self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
             self.i = self.i + 1
 
-        deltaX = self.maxX*0.15
+        if localmaxY > 0:
+            localmaxY = 1.1 * localmaxY
+        else:
+            localmaxY = 0.9 * localmaxY
+
+        if localmaxX > 0:
+            localmaxX = 1.1 * localmaxX
+        else:
+            localmaxX = 0.9 * localmaxX
+
+	
+        if localminX < 0:
+            localminX = 1.1 * localminX
+        else:
+            localminX = 0.9 * localminX
+
+        if localminY < 0:
+            localminY = 1.1 * localminY
+        else:
+            localminY = 0.9 * localminY
+	
+        deltaX = self.maxX*0.3
         if deltaX < 0:
             deltaX = -deltaX
 
-        deltaY = self.maxY*0.15
+        deltaY = self.maxY*0.3
         if deltaY < 0:
             deltaY = -deltaY
         
@@ -69,13 +90,15 @@ class SimulationWrapper(QThread):
             self.minX = self.minX + deltaX
         if (self.minY + deltaY) < localminY > self.minY:
             self.minY = self.minY + deltaY
-        print(str(self.minX) + " , "+ str(self.maxX))               
-                        #self.maxX = self.maxX - (self.maxX - localmaxX)/2
-                        #self.maxY = self.maxY - (self.maxY - localmaxY)/2
-                        #self.minX = self.minX + (localminX - self.minX)/2
-                        #self.minY = self.minY + (localminY - self.minY)/2
-        self.i = 0
+        print(str(localmaxX)+ " , "+ str(self.minX)+ " , "+ str(localminX)+ " , "+ str(self.maxX)+ " , "+ str(localmaxY)+ " , "+ str(self.minY)+ " , "+ str(localminY)+ " , "+ str(self.maxY))
+        if localmaxX < self.minX or localminX > self.maxX or localmaxY < self.minY or localminY > self.maxY:
+            self.minX = localminX * 1.5
+            self.maxX = localmaxX * 1.5
+            self.minY = localminY * 1.5
+            self.maxY = localmaxY * 1.5
+            print("error")
 
+        self.i = 0
         while self.i < self.simulation.mi:
             if self.minX < self.simulation.population[self.i].x < self.maxX and self.minY < self.simulation.population[self.i].y < self.maxY:
                 self.xy_chart.add(str(self.i), [(self.simulation.population[self.i].x, self.simulation.population[self.i].y)])
@@ -134,7 +157,7 @@ class SimulationWrapper(QThread):
             # minimal sleep after every step, for main thread to get
             # over control and deal with new events.
             self.updated.emit(res)
-            sleep(0.1)
+            sleep(0.3)
 
         if self.condition():
             self.running = False
