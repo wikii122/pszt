@@ -74,11 +74,11 @@ class SimulationWrapper(QThread):
         else:
             localminY = 0.9 * localminY
 	
-        deltaX = self.maxX*0.3
+        deltaX = self.maxX*0.1
         if deltaX < 0:
             deltaX = -deltaX
 
-        deltaY = self.maxY*0.3
+        deltaY = self.maxY*0.1
         if deltaY < 0:
             deltaY = -deltaY
         
@@ -157,7 +157,7 @@ class SimulationWrapper(QThread):
             # minimal sleep after every step, for main thread to get
             # over control and deal with new events.
             self.updated.emit(res)
-            sleep(0.3)
+            sleep(0.1)
 
         if self.condition():
             self.running = False
