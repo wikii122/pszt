@@ -145,9 +145,11 @@ class SimulationWrapper(QThread):
         self.running = True
         super(SimulationWrapper, self).start()
 
+    @Slot(int)
     def changeType(self, newtype):
         self.graphtype = newtype
-        self.update_graph()
+        if self.simulation:
+            self.update_graph()
 
     @Slot()
     def pause(self):
