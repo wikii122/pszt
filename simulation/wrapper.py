@@ -98,7 +98,7 @@ class SimulationWrapper(QThread):
         self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
 
         while (self.generatedgraph[-1][0] - self.generatedgraph[0][0]) >20:
-            del(self.generatedgraph[0])
+            del self.generatedgraph[0]
 
         self.barChart.add(' b' , self.generatedgraph)
         #GraphData = self.xy_chart.render()
@@ -148,7 +148,7 @@ class SimulationWrapper(QThread):
             res = self.simulation.step(prints = False)
             self.update_graph()
             self.updated.emit(res)
-            sleep(0.1)
+            sleep(0.05)
 
         if self.condition():
             self.running = False
