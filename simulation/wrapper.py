@@ -119,7 +119,7 @@ class SimulationWrapper(QThread):
             self.maxX = 3
             self.maxY = 3
             self.generatedgraph = []
-            #self.update_graph()
+            self.update_graph()
         self.running = True
         super(SimulationWrapper, self).start()
     @Slot()
