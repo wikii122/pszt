@@ -28,12 +28,16 @@ class SimulationWrapper(QThread):
         self.minY = -3
         self.maxX = 3
         self.maxY = 3
+        self.generatedgraph = list()
+
 
     def update_graph(self):
         """
         Function used to generate new graph and send appropiate signal to
         window.
         """
+        self.barChart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
+
         localminX = localmaxX = self.simulation.population[0].x
         localminY = localmaxY = self.simulation.population[0].y
         self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
@@ -87,13 +91,19 @@ class SimulationWrapper(QThread):
 
         # Graph creation
         for member in self.simulation.population:
+            self.generatedgraph.append((member.generation,member.value))
             if self.minX < member.x < self.maxX and self.minY < member.y < self.maxY:
                 self.xy_chart.add('punkt', [(member.x, member.y)])
 
         self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
 
-        graph_data = self.xy_chart.render()
-        self.graph_changed.emit(graph_data)
+        while (self.generatedgraph[-1][0] - self.generatedgraph[0][0]) >20:
+            del(self.generatedgraph[0])
+
+        self.barChart.add(' b' , self.generatedgraph)
+        #GraphData = self.xy_chart.render()
+        GraphData = self.barChart.render()
+        self.graph_changed.emit(GraphData)
 
     @Slot(dict)
     def start(self, param):
@@ -104,7 +114,12 @@ class SimulationWrapper(QThread):
             param['lambda_'] = param['lambda']
             del param['lambda']
             self.simulation = Simulation(FUNCTION, **param)
-            self.update_graph()
+            self.minX = -3
+            self.minY = -3
+            self.maxX = 3
+            self.maxY = 3
+            self.generatedgraph = []
+            #self.update_graph()
         self.running = True
         super(SimulationWrapper, self).start()
 
