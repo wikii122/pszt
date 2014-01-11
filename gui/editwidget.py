@@ -12,6 +12,8 @@ class EditWidget(QtGui.QWidget):
     start_simulation = QtCore.Signal(dict)
     pause_simulation = QtCore.Signal()
     continue_simulation = QtCore.Signal()
+    error = QtCore.Signal(str)
+    graph_type = QtCore.Signal(int)
 
     def __init__(self, sim, parent=None, status=None):
         super(EditWidget, self).__init__(parent=parent)
@@ -28,6 +30,7 @@ class EditWidget(QtGui.QWidget):
         self.pause_simulation.connect(sim.pause)
         self.continue_simulation.connect(sim.continue_)
         self.destroyed.connect(sim.terminate)
+        self.graph_type.connect(sim.changeType)
 
         sim.simulation_end.connect(self.finished)
 
@@ -43,6 +46,12 @@ class EditWidget(QtGui.QWidget):
             edit.textChanged.connect(self.change)
             self.layout.addRow(QtGui.QLabel(label), edit)
             self.edits.append(edit)
+
+        combo = QtGui.QComboBox(self)
+        combo.addItem("Y/Step")
+        combo.addItem("X/Y")
+        self.layout.addRow(QtGui.QLabel("Wykres"), combo)
+        combo.activated.connect(QtCore.Slot()(self.graph_type.emit))  # Manually decorating slot on runtime.
 
     def change(self, _):
         """
@@ -71,24 +80,22 @@ class EditWidget(QtGui.QWidget):
         if not self.labels:
             raise Exception("Button pushed before GUI initialization finished")
 
-
         if not self.run:
-            # Actually, this can be written a lot prettier
             values = dict()
             if self.changed:
                 # Start running with current parameters
                 try:
                     values = {x:float(y.text()) for x, y in zip(self.labels, self.edits)}
                 except ValueError:
-                    # TODO: Display error message  in place of result display.
+                    self.error.emit("Bad or none value!")
                     self.status.showMessage("Error!")
                     return
                 if values['lambda'] < 2 or values['mi'] < 2:
-                    # TODO: Display error message  in place of result display.
+                    self.error.emit("Value less than 2")
                     self.status.showMessage("Error!")
                     return
                 elif values['lambda'] < values['mi']:
-                    # TODO: Display error message  in place of result display.
+                    self.error.emit("Mi < lambda")
                     self.status.showMessage("Error!")
                     return
 
@@ -98,7 +105,6 @@ class EditWidget(QtGui.QWidget):
             if self.status:
                 self.status.showMessage("Running!")
             self.start_simulation.emit(values)
-            sleep(0.001)
         else:
             # Stop simulation without updating new parameters.
             self.run = False
@@ -111,7 +117,8 @@ class EditWidget(QtGui.QWidget):
                 if self.status:
                     self.status.showMessage("Ready!")
             self.pause_simulation.emit()
-            sleep(0.001)
+
+        sleep(0.001)
 
 
     @QtCore.Slot()
@@ -124,5 +131,4 @@ class EditWidget(QtGui.QWidget):
         self.button.setText("&Run!")
         if self.status:
             self.status.showMessage("Ready!")
-        # TODO finalize process
 
