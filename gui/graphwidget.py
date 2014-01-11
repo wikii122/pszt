@@ -1,14 +1,12 @@
 """
 GUI element responsible for drawing and displaying graph.
 """
-import sys
 import pygal
 
 from PySide import QtGui, QtCore, QtWebKit
 
 
 class GraphWidget(QtGui.QWidget):
-
     def __init__(self, sim, parent=None):
         super(GraphWidget, self).__init__(parent)
 
@@ -20,7 +18,6 @@ class GraphWidget(QtGui.QWidget):
         self.initView()
 
         sim.graph_changed.connect(self.showgraph)
-
 
     @QtCore.Slot()
     def showgraph(self, data):
