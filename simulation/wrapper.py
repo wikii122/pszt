@@ -97,7 +97,8 @@ class SimulationWrapper(QThread):
 	#dodanie punktów definiujących pole widzenia grafu
         self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
 
-        
+        while (self.generatedgraph[-1][0] - self.generatedgraph[0][0]) >20:
+            del(self.generatedgraph[0])
 
         self.barChart.add(' b' , self.generatedgraph)
         #GraphData = self.xy_chart.render()
