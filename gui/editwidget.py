@@ -13,6 +13,7 @@ class EditWidget(QtGui.QWidget):
     pause_simulation = QtCore.Signal()
     continue_simulation = QtCore.Signal()
     error = QtCore.Signal(str)
+    graph_type = QtCore.Signal(int)
 
     def __init__(self, sim, parent=None, status=None):
         super(EditWidget, self).__init__(parent=parent)
@@ -44,6 +45,12 @@ class EditWidget(QtGui.QWidget):
             edit.textChanged.connect(self.change)
             self.layout.addRow(QtGui.QLabel(label), edit)
             self.edits.append(edit)
+
+        combo = QtGui.QComboBox(self)
+        combo.addItem("Y/Step")
+        combo.addItem("X/Y")
+        self.layout.addRow(QtGui.QLabel("Wykres"), combo)
+        combo.activated.connect(QtCore.Slot()(lambda x: self.graph_type.emit(x)))  # Manually decorating slot on runtime.
 
     def change(self, _):
         """
