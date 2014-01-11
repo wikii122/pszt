@@ -30,13 +30,15 @@ class SimulationWrapper(QThread):
         self.maxX = 3
         self.maxY = 3
         self.generatedgraph = list()
+        
 
     def update_graph(self):
         """
         Function used to generate new graph and send appropiate signal to
         window.
         """
-        self.barChart = pygal.Bar()
+        self.barChart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
+
         localminX = localmaxX = self.simulation.population[0].x
         localminY = localmaxY = self.simulation.population[0].y
         self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
@@ -89,13 +91,13 @@ class SimulationWrapper(QThread):
 
 	#dodanie punktow do grafu
         for member in self.simulation.population:
+            self.generatedgraph.append((member.generation,member.value))
             if self.minX < member.x < self.maxX and self.minY < member.y < self.maxY:
                 self.xy_chart.add('punkt', [(member.x, member.y)])
 	#dodanie punktów definiujących pole widzenia grafu
         self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
 
         
-        self.generatedgraph.append(self.simulation.population[0].value)
 
         self.barChart.add(' b' , self.generatedgraph)
         #GraphData = self.xy_chart.render()
@@ -115,6 +117,7 @@ class SimulationWrapper(QThread):
             self.minY = -3
             self.maxX = 3
             self.maxY = 3
+            self.generatedgraph = []
             #self.update_graph()
         self.running = True
         super(SimulationWrapper, self).start()
