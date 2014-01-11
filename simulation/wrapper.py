@@ -29,6 +29,7 @@ class SimulationWrapper(QThread):
         self.maxX = 3
         self.maxY = 3
         self.generatedgraph = list()
+        self.graphtype = 0
 
 
     def update_graph(self):
@@ -36,12 +37,10 @@ class SimulationWrapper(QThread):
         Function used to generate new graph and send appropiate signal to
         window.
         """
-        self.barChart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
+
 
         localminX = localmaxX = self.simulation.population[0].x
         localminY = localmaxY = self.simulation.population[0].y
-        self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
-        self.xy_chart.title = "Krok "+str(self.simulation.steps)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
 
         for member in self.simulation.population:
             if localminX > member.x:
@@ -55,24 +54,24 @@ class SimulationWrapper(QThread):
 
         # Prevent point converging in corners
         if localmaxY > 0:
-            localmaxY = 1.1 * localmaxY
+            localmaxY = 1.05 * localmaxY
         else:
-            localmaxY = 0.9 * localmaxY
+            localmaxY = 0.95 * localmaxY
 
         if localmaxX > 0:
-            localmaxX = 1.1 * localmaxX
+            localmaxX = 1.05 * localmaxX
         else:
-            localmaxX = 0.9 * localmaxX
+            localmaxX = 0.95 * localmaxX
 
         if localminX < 0:
-            localminX = 1.1 * localminX
+            localminX = 1.05 * localminX
         else:
-            localminX = 0.9 * localminX
+            localminX = 0.95 * localminX
 
         if localminY < 0:
-            localminY = 1.1 * localminY
+            localminY = 1.05 * localminY
         else:
-            localminY = 0.9 * localminY
+            localminY = 0.95 * localminY
 
         # Fluent scaling
         deltaX = self.maxX*0.1
@@ -89,23 +88,44 @@ class SimulationWrapper(QThread):
         if (self.minY + deltaY) < localminY > self.minY:
             self.minY = self.minY + deltaY
 
-        # Graph creation
-        for member in self.simulation.population:
-            self.generatedgraph.append((member.generation, member.value))
-            if self.minX < member.x < self.maxX and self.minY < member.y < self.maxY:
-                self.xy_chart.add('punkt', [(member.x, member.y)])
-            sleep(0)
+        if self.maxX < localminX or self.minX > localmaxX or self.maxY < localminY or self.minY > localmaxY:
+            self.maxX = 1.5
+            self.minX = -1.5
+            self.maxY = 1.5
+            self.minY = -1.5
+        # calculating for "bar Chart"
+        self.generatedgraph.append((self.simulation.population[0].generation, self.simulation.population[0].value))
+        self.generatedgraph.append((self.simulation.population[-1].generation, self.simulation.population[-1].value))
 
-        self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
-
-        while (self.generatedgraph[-1][0] - self.generatedgraph[0][0]) > 20:
+        while (self.generatedgraph[-1][0] - self.generatedgraph[0][0]) > 21:
             self.generatedgraph = self.generatedgraph[1:]
-            sleep(0)
 
-        self.barChart.add(' b' , self.generatedgraph)
-        #GraphData = self.xy_chart.render()
-        graph_data = self.barChart.render()
-        self.graph_changed.emit(graph_data)
+        #calculating for X/Y chart
+
+        if self.graphtype == 1 and self.simulation.steps%3 == 0:
+            self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
+            self.xy_chart.title = "Krok "+str(self.simulation.steps)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
+            points = list()
+            for member in self.simulation.population:
+                if self.minX < member.x < self.maxX and self.minY < member.y < self.maxY:
+                    points.append((member.x, member.y))
+
+            self.xy_chart.add('punkt', points)
+            self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
+            GraphData = self.xy_chart.render()
+            self.graph_changed.emit(GraphData)
+
+
+        #displaying second chart
+        if self.graphtype == 0:
+            self.barChart = pygal.XY( show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
+            i = 0
+            while i < len(self.generatedgraph):
+                self.barChart.add('punkty' , [(self.generatedgraph[i][0], self.generatedgraph[i][1]),(self.generatedgraph[i+1][0], self.generatedgraph[i+1][1])] )
+                i = i+2
+            GraphData = self.barChart.render()
+            self.graph_changed.emit(GraphData)
+
 
     @Slot(dict)
     def start(self, param):
@@ -124,6 +144,10 @@ class SimulationWrapper(QThread):
             self.update_graph()
         self.running = True
         super(SimulationWrapper, self).start()
+
+    def changeType(self, newtype):
+        self.graphtype = newtype
+        self.update_graph()
 
     @Slot()
     def pause(self):
@@ -149,7 +173,7 @@ class SimulationWrapper(QThread):
         while self.running and not self.simulation.condition():
             res = self.simulation.step(prints = False)
             self.update_graph()
-            sleep(0.05)
+            sleep(0.1)
 
         if self.condition():
             self.running = False

@@ -30,6 +30,7 @@ class EditWidget(QtGui.QWidget):
         self.pause_simulation.connect(sim.pause)
         self.continue_simulation.connect(sim.continue_)
         self.destroyed.connect(sim.terminate)
+        self.graph_type.connect(sim.changeType)
 
         sim.simulation_end.connect(self.finished)
 
