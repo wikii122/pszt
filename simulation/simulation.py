@@ -1,9 +1,10 @@
 """
 Top level representation of simulation.
 """
+import random
+
 from simulation import tools
 from simulation.sprite import Sprite
-import random
 
 class Simulation:
     """
@@ -43,15 +44,15 @@ class Simulation:
             self.population.append(sprite)
             self.population = sorted(self.population)
 
+
     def step(self, prints=True):
         self.steps += 1
 
         sprites = self.create_new_population()
         sprites = self.crossover(sprites)
         sprites = self.mutate(sprites)
-
         sprites = sorted(sprites)
-        
+
         self.population = sprites[:self.mi]
 
         if not self.steps % 10 and prints:
@@ -60,25 +61,25 @@ class Simulation:
 
     def condition(self):
         return abs(self.population[0] - self.population[-1]) < self.epsilon
-    
+
     def create_new_population(self):
         i = self.lambda_
         sprites = list()
-        
+
         while i > 0:
             j = random.randint(0, len(self.population) - 1)
             sprites.append(self.population[j])
             i -= 1
-            
+
         return sprites
-        
+
     def crossover(self, population):
         sprites = list()
         population_idx = 0
-        
+
         for member in population:
             a = random.random()
-            
+
             """
             there are n-2 possible slots to select sprite to crossover with,
             but randomized value can only be used as index if its less than
@@ -86,34 +87,33 @@ class Simulation:
             normalize it by adding 1 to match full range of index values
             """
             i = random.randint(0, len(self.population) - 2)
-            
+
             if (i >= population_idx):
                 i += 1
-                
+
             x = tools.interpolate(a, member.x, population[i].x)
             y = tools.interpolate(a, member.y, population[i].y)
-            
+
             deviationX = tools.interpolate(a, member.deviationX,
                                         population[i].deviationY)
-            deviationY = tools.interpolate(a, member.deviationY, 
+            deviationY = tools.interpolate(a, member.deviationY,
                                         population[i].deviationY)
-                
-            sprite = Sprite(x, y, self.func, member.deviationX, member.deviationY, 
+
+            sprite = Sprite(x, y, self.func, member.deviationX, member.deviationY,
                             member.generation + 1)
-                            
+
             tools.apply_bounds(sprite)
-            
             sprites.append(sprite)
-            
+
             population_idx += 1
 
         return sprites
-        
+
     def mutate(self, sprites):
-        
         for sprite in sprites:
             if random.random() < self.mutation_chance:
                 sprite.mutate()
-                
+
+
         return sprites
-            
+

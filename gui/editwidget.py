@@ -72,9 +72,7 @@ class EditWidget(QtGui.QWidget):
         if not self.labels:
             raise Exception("Button pushed before GUI initialization finished")
 
-
         if not self.run:
-            # Actually, this can be written a lot prettier
             values = dict()
             if self.changed:
                 # Start running with current parameters
@@ -89,7 +87,6 @@ class EditWidget(QtGui.QWidget):
                     self.status.showMessage("Error!")
                     return
                 elif values['lambda'] < values['mi']:
-                    # TODO: Display error message  in place of result display.
                     self.error.emit("Mi < lambda")
                     self.status.showMessage("Error!")
                     return
@@ -100,7 +97,6 @@ class EditWidget(QtGui.QWidget):
             if self.status:
                 self.status.showMessage("Running!")
             self.start_simulation.emit(values)
-            sleep(0.001)
         else:
             # Stop simulation without updating new parameters.
             self.run = False
@@ -113,7 +109,8 @@ class EditWidget(QtGui.QWidget):
                 if self.status:
                     self.status.showMessage("Ready!")
             self.pause_simulation.emit()
-            sleep(0.001)
+
+        sleep(0.001)
 
 
     @QtCore.Slot()
@@ -126,5 +123,4 @@ class EditWidget(QtGui.QWidget):
         self.button.setText("&Run!")
         if self.status:
             self.status.showMessage("Ready!")
-        # TODO finalize process
 

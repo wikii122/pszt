@@ -41,7 +41,7 @@ class SimulationWrapper(QThread):
         localminX = localmaxX = self.simulation.population[0].x
         localminY = localmaxY = self.simulation.population[0].y
         self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
-        self.xy_chart.title = "Krok "+str(self.simulation.population[0].generation)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
+        self.xy_chart.title = "Krok "+str(self.simulation.steps)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
 
         for member in self.simulation.population:
             if localminX > member.x:
@@ -91,19 +91,21 @@ class SimulationWrapper(QThread):
 
         # Graph creation
         for member in self.simulation.population:
-            self.generatedgraph.append((member.generation,member.value))
+            self.generatedgraph.append((member.generation, member.value))
             if self.minX < member.x < self.maxX and self.minY < member.y < self.maxY:
                 self.xy_chart.add('punkt', [(member.x, member.y)])
+            sleep(0)
 
         self.xy_chart.add('Granica', [(self.minX, self.minY), (self.maxX, self.maxY), (self.maxX, self.minY), (self.minX, self.maxY)])
 
-        while (self.generatedgraph[-1][0] - self.generatedgraph[0][0]) >20:
-            del self.generatedgraph[0]
+        while (self.generatedgraph[-1][0] - self.generatedgraph[0][0]) > 20:
+            self.generatedgraph = self.generatedgraph[1:]
+            sleep(0)
 
         self.barChart.add(' b' , self.generatedgraph)
         #GraphData = self.xy_chart.render()
-        GraphData = self.barChart.render()
-        self.graph_changed.emit(GraphData)
+        graph_data = self.barChart.render()
+        self.graph_changed.emit(graph_data)
 
     @Slot(dict)
     def start(self, param):
@@ -119,7 +121,7 @@ class SimulationWrapper(QThread):
             self.maxX = 3
             self.maxY = 3
             self.generatedgraph = []
-            #self.update_graph()
+            self.update_graph()
         self.running = True
         super(SimulationWrapper, self).start()
 
@@ -147,7 +149,6 @@ class SimulationWrapper(QThread):
         while self.running and not self.simulation.condition():
             res = self.simulation.step(prints = False)
             self.update_graph()
-            self.updated.emit(res)
             sleep(0.05)
 
         if self.condition():
