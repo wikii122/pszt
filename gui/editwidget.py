@@ -50,7 +50,7 @@ class EditWidget(QtGui.QWidget):
         combo.addItem("Y/Step")
         combo.addItem("X/Y")
         self.layout.addRow(QtGui.QLabel("Wykres"), combo)
-        combo.activated.connect(QtCore.Slot()(lambda x: self.graph_type.emit(x)))  # Manually decorating slot on runtime.
+        combo.activated.connect(QtCore.Slot()(self.graph_type.emit))  # Manually decorating slot on runtime.
 
     def change(self, _):
         """
