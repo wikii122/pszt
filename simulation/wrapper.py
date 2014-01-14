@@ -119,6 +119,7 @@ class SimulationWrapper(QThread):
         #displaying second chart
         if self.graphtype == 0:
             self.barChart = pygal.XY( show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
+            self.barChart.title = "Krok "+str(self.simulation.steps)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
             i = 0
             while i < len(self.generatedgraph):
                 self.barChart.add('punkty' , [(self.generatedgraph[i][0], self.generatedgraph[i][1]),(self.generatedgraph[i+1][0], self.generatedgraph[i+1][1])] )
