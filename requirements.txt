@@ -14,3 +14,4 @@
 # When all above is satisfied, run pip install -r requirements.txt
 
 PySide
+pygal
