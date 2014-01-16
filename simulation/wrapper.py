@@ -102,7 +102,7 @@ class SimulationWrapper(QThread):
 
         #calculating for X/Y chart
 
-        if self.graphtype == 1 and self.simulation.steps%3 == 0:
+        if self.graphtype == 1 and (self.simulation.steps%3 == 0 or self.condition()):
             self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
             self.xy_chart.title = "Krok "+str(self.simulation.steps)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
             points = list()
