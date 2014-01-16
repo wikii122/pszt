@@ -38,7 +38,6 @@ class SimulationWrapper(QThread):
         window.
         """
 
-
         localminX = localmaxX = self.simulation.population[0].x
         localminY = localmaxY = self.simulation.population[0].y
 
@@ -102,7 +101,7 @@ class SimulationWrapper(QThread):
 
         #calculating for X/Y chart
 
-        if self.graphtype == 1 and (self.simulation.steps%3 == 0 or self.condition()):
+        if self.graphtype == 1 and (self.simulation.steps%3 == 0 or not self.running):
             self.xy_chart = pygal.XY(stroke=False, show_legend = False, title_font_size = 27, label_font_size = 10, print_values = False, human_readable = True)
             self.xy_chart.title = "Krok "+str(self.simulation.steps)+ " \t\t\t\t\tNajlepszy wynik: (" + str(self.simulation.population[0].x) + "," + str(self.simulation.population[0].y) + ") wartosc: " + str(self.simulation.population[0].value)
             points = list()
@@ -183,6 +182,8 @@ class SimulationWrapper(QThread):
             #self.minX = self.minY = -3
             #self.maxX = self.maxX = 3
             self.simulation_end.emit()
+
+        self.update_graph()
 
     def __del__(self):
         #self.running = False
