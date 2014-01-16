@@ -95,7 +95,7 @@ class Simulation:
             y = tools.interpolate(a, member.y, population[i].y)
 
             deviationX = tools.interpolate(a, member.deviationX,
-                                        population[i].deviationY)
+                                        population[i].deviationX)
             deviationY = tools.interpolate(a, member.deviationY,
                                         population[i].deviationY)
 
