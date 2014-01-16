@@ -1,0 +1,16 @@
+# Important !!
+# Read this file before applying to pip !!!
+
+# Software requirements
+# Python 3.x
+# QT4 >=4.5 [pacman -S qt4]
+
+# Recommended
+# ipython
+# ipdb
+
+# Python dependencies
+# Do not install manually.
+# When all above is satisfied, run pip install -r requirements.txt
+
+PySide

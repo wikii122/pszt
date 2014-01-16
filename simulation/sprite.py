@@ -1,34 +1,40 @@
 """
 Contains Sprite class definition.
 """
-# TODO remove relative import
-from . import tools
-
+from simulation import tools
+import math
+import random
 
 class Sprite:
     """
     Represents the population member during simulation.
     """
-    def __init__(self, x, y, fun, generation=0):
+    def __init__(self, x, y, fun, deviationX, deviationY, generation=1):
         self.x = x
         self.y = y
         self.fun = fun
         self.value = fun(x, y)
+        self.deviationX = deviationX
+        self.deviationY = deviationY
         self.generation = generation
+        
+    def mutate(self):
+        tauP = 1.0 / 2.0
+        tau = 1.0 / math.sqrt(2.0 * math.sqrt(2.0))
+        
+        commonN = random.gauss(0, 1)
+        xN = random.gauss(0, 1)
+        yN = random.gauss(0, 1)
+        self.deviationX *= math.exp(tauP * commonN + tau * xN)
+        self.deviationY *= math.exp(tauP * commonN + tau * yN)
+        
+        self.x += self.deviationX * random.gauss(0, 1)
+        self.y += self.deviationY * random.gauss(0, 1)
+        
+        tools.apply_bounds(self)
+        
+        self.value = self.fun(self.x, self.y)
 
-    def spawn(self, lambda_, n):
-        sprites = list()
-        delta = self.x/n
-        coord = tools.point_generator(min_x=self.x-delta, delta_x=2*delta,
-                                      min_y=self.y-delta, delta_y=2*delta)
-        while lambda_:
-            lambda_ -= 1
-            sprites.append(Sprite(*next(coord),
-                                   fun=self.fun,
-                                   generation=self.generation+1))
-        return sprites
-
-    # TODO: check comparisons
     def __gt__(self, other):
         return self.value > other.value
 
@@ -45,7 +51,10 @@ class Sprite:
         return self.value <= other.value
 
     def __str__(self):
-        return "({x}, {y}) => {val}".format(x=self.x, y=self.y, val=self.value)
-    
+        return "({x:<20}, {y:<20}) => {val:<19}".format(x=self.x, y=self.y,
+                                                        val=self.value)
+    def __add__(self, other):
+        return self.value + other.value
+
     def __sub__(self, other):
         return self.value - other.value
